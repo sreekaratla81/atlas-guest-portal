@@ -1,0 +1,12 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+.site-header {
+    margin-bottom: 0;
+}
+
+.site-footer {
+    background-color: #003366;
+    color: #fff;
+}
