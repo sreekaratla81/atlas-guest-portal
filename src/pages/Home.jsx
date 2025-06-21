@@ -116,19 +116,9 @@ const Home = () => {
         </button>
       </div>
 
-      <section className="listings" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem', padding: '2rem' }}>
+      <section className="listings">
         {listings.map((listing, idx) => (
-          <div
-            className="card"
-            key={idx}
-            style={{
-              background: 'white',
-              padding: '1rem',
-              borderRadius: '0.75rem',
-              boxShadow: '0 2px 10px rgba(0,0,0,0.05)',
-              gridColumn: idx === 0 ? '1 / -1' : 'auto'
-            }}
-          >
+          <div className="card" key={idx}>
             <img src={listing.img} alt={listing.title} style={{ width: '100%', borderRadius: '0.5rem', height: '200px', objectFit: 'cover' }} />
             <h2 style={{ fontSize: '1.25rem', margin: '0.75rem 0 0.5rem' }}>{listing.title}</h2>
             <p style={{ fontSize: '0.95rem', color: '#555' }}>{listing.desc}</p>
