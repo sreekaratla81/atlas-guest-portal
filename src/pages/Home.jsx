@@ -9,39 +9,39 @@ const heroStyle = {
 
 const listings = [
   {
-    img: 'https://source.unsplash.com/400x300/?apartment',
-    title: 'Room 101',
-    desc: '1BHK unit with cozy interiors and balcony access. Max 5 guests.'
+    img: 'https://atlashomestorage.blob.core.windows.net/listing-images/501/cover.jpg',
+    title: 'Penthouse 501',
+    desc: 'Premium stay with private jacuzzi, home theatre, and sunset view.'
   },
   {
-    img: 'https://source.unsplash.com/400x300/?room',
-    title: 'Room 102',
-    desc: 'Bright and airy 1BHK with modern amenities. Ideal for families.'
-  },
-  {
-    img: 'https://source.unsplash.com/400x300/?studio',
-    title: 'Room 201',
-    desc: 'Compact studio with work desk and kitchenette. Budget-friendly.'
-  },
-  {
-    img: 'https://source.unsplash.com/400x300/?bedroom',
-    title: 'Room 202',
-    desc: 'Spacious stay with natural light and private bath.'
-  },
-  {
-    img: 'https://source.unsplash.com/400x300/?interior',
+    img: 'https://atlashomestorage.blob.core.windows.net/listing-images/301/cover.jpg',
     title: 'Room 301',
     desc: 'Quiet corner unit. Well-suited for long stays or work from home.'
   },
   {
-    img: 'https://source.unsplash.com/400x300/?furnished',
+    img: 'https://atlashomestorage.blob.core.windows.net/listing-images/302/cover.jpg',
     title: 'Room 302',
     desc: 'Designer 1BHK with high-speed internet and kitchen.'
   },
   {
-    img: 'https://source.unsplash.com/400x300/?luxury,home',
-    title: 'Penthouse 501',
-    desc: 'Premium stay with private jacuzzi, home theatre, and sunset view.'
+    img: 'https://atlashomestorage.blob.core.windows.net/listing-images/201/cover.jpg',
+    title: 'Room 201',
+    desc: 'Compact studio with work desk and kitchenette. Budget-friendly.'
+  },
+  {
+    img: 'https://atlashomestorage.blob.core.windows.net/listing-images/202/cover.jpg',
+    title: 'Room 202',
+    desc: 'Spacious stay with natural light and private bath.'
+  },
+  {
+    img: 'https://atlashomestorage.blob.core.windows.net/listing-images/101/cover.jpg',
+    title: 'Room 101',
+    desc: '1BHK unit with cozy interiors and balcony access. Max 5 guests.'
+  },
+  {
+    img: 'https://atlashomestorage.blob.core.windows.net/listing-images/102/cover.jpg',
+    title: 'Room 102',
+    desc: 'Bright and airy 1BHK with modern amenities. Ideal for families.'
   }
 ];
 
@@ -115,20 +115,51 @@ const Home = () => {
         </button>
       </div>
 
-      <section className="contact" style={{ textAlign: 'center', background: '#f0f0f0', padding: '1.5rem', fontSize: '1rem' }}>
-        <p><strong>Contact:</strong> +91-7032493290 (Also on WhatsApp)</p>
-        <p><strong>Location:</strong> 165, KPHB 7th Phase, Atlas Homes, Hyderabad, Telangana, India</p>
-        <p><a href="https://maps.app.goo.gl/yAS7whn2uHNuwtEPA" target="_blank" rel="noopener noreferrer">View on Google Maps</a></p>
-      </section>
-
-      <section className="listings" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem', padding: '2rem' }}>
+      <section className="listings">
         {listings.map((listing, idx) => (
-          <div className="card" key={idx} style={{ background: 'white', padding: '1rem', borderRadius: '0.75rem', boxShadow: '0 2px 10px rgba(0,0,0,0.05)' }}>
-            <img src={listing.img} alt={listing.title} style={{ width: '100%', borderRadius: '0.5rem', height: '200px', objectFit: 'cover' }} />
+          <div className="card" key={idx}>
+            <img
+              src={listing.img}
+              alt={listing.title}
+              onError={(e) =>
+                (e.target.src =
+                  'https://atlashomestorage.blob.core.windows.net/listing-images/fallback.jpeg')}
+              style={{
+                width: '100%',
+                borderRadius: '0.5rem',
+                height: listing.title === 'Penthouse 501' ? '450px' : '320px',
+                objectFit: 'cover'
+              }}
+            />
             <h2 style={{ fontSize: '1.25rem', margin: '0.75rem 0 0.5rem' }}>{listing.title}</h2>
             <p style={{ fontSize: '0.95rem', color: '#555' }}>{listing.desc}</p>
+            <button
+              className="btn btn-danger"
+              style={{ backgroundColor: '#FF5A5F', borderColor: '#FF5A5F', marginTop: 'auto' }}
+            >
+              Reserve
+            </button>
           </div>
         ))}
+      </section>
+
+      <section className="contact">
+        <p>
+          <strong>Contact:</strong> +91-7032493290 (Also on WhatsApp)
+        </p>
+        <p>
+          <strong>Location:</strong> 165, KPHB 7th Phase, Atlas Homes, Hyderabad,
+          Telangana, India
+        </p>
+        <p>
+          <a
+            href="https://maps.app.goo.gl/yAS7whn2uHNuwtEPA"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            View on Google Maps
+          </a>
+        </p>
       </section>
 
     </>
