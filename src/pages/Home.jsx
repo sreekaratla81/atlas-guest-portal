@@ -122,7 +122,7 @@ const Home = () => {
               src={listing.img}
               alt={listing.title}
               onError={(e) => (e.target.src = 'https://atlashomestorage.blob.core.windows.net/listing-images/fallback.jpeg')}
-              style={{ width: '100%', borderRadius: '0.5rem', height: '250px', objectFit: 'cover' }}
+              style={{ width: '100%', borderRadius: '0.5rem', height: '320px', objectFit: 'cover' }}
             />
             <h2 style={{ fontSize: '1.25rem', margin: '0.75rem 0 0.5rem' }}>{listing.title}</h2>
             <p style={{ fontSize: '0.95rem', color: '#555' }}>{listing.desc}</p>

@@ -19,7 +19,7 @@ const Listings = () => {
                             src="https://via.placeholder.com/400x300?text=Listing"
                             className="card-img-top"
                             alt={listing.name}
-                            style={{ height: '375px', objectFit: 'cover' }}
+                            style={{ height: '470px', objectFit: 'cover' }}
                         />
                         <div className="card-body d-flex flex-column">
                             <h5 className="card-title">{listing.name}</h5>
