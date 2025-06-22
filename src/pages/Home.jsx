@@ -9,38 +9,37 @@ const heroStyle = {
 
 const listings = [
   {
-    img:
-      'https://yourstorage.blob.core.windows.net/listing-images/penthouse-501.jpg',
+    img: 'https://atlashomestorage.blob.core.windows.net/listing-images/501/cover.jpg',
     title: 'Penthouse 501',
     desc: 'Premium stay with private jacuzzi, home theatre, and sunset view.'
   },
   {
-    img: 'https://yourstorage.blob.core.windows.net/listing-images/room-301.jpg',
+    img: 'https://atlashomestorage.blob.core.windows.net/listing-images/301/cover.jpg',
     title: 'Room 301',
     desc: 'Quiet corner unit. Well-suited for long stays or work from home.'
   },
   {
-    img: 'https://yourstorage.blob.core.windows.net/listing-images/room-302.jpg',
+    img: 'https://atlashomestorage.blob.core.windows.net/listing-images/302/cover.jpg',
     title: 'Room 302',
     desc: 'Designer 1BHK with high-speed internet and kitchen.'
   },
   {
-    img: 'https://yourstorage.blob.core.windows.net/listing-images/room-201.jpg',
+    img: 'https://atlashomestorage.blob.core.windows.net/listing-images/201/cover.jpg',
     title: 'Room 201',
     desc: 'Compact studio with work desk and kitchenette. Budget-friendly.'
   },
   {
-    img: 'https://yourstorage.blob.core.windows.net/listing-images/room-202.jpg',
+    img: 'https://atlashomestorage.blob.core.windows.net/listing-images/202/cover.jpg',
     title: 'Room 202',
     desc: 'Spacious stay with natural light and private bath.'
   },
   {
-    img: 'https://yourstorage.blob.core.windows.net/listing-images/room-101.jpg',
+    img: 'https://atlashomestorage.blob.core.windows.net/listing-images/101/cover.jpg',
     title: 'Room 101',
     desc: '1BHK unit with cozy interiors and balcony access. Max 5 guests.'
   },
   {
-    img: 'https://yourstorage.blob.core.windows.net/listing-images/room-102.jpg',
+    img: 'https://atlashomestorage.blob.core.windows.net/listing-images/102/cover.jpg',
     title: 'Room 102',
     desc: 'Bright and airy 1BHK with modern amenities. Ideal for families.'
   }
@@ -119,7 +118,12 @@ const Home = () => {
       <section className="listings">
         {listings.map((listing, idx) => (
           <div className="card" key={idx}>
-            <img src={listing.img} alt={listing.title} style={{ width: '100%', borderRadius: '0.5rem', height: '200px', objectFit: 'cover' }} />
+            <img
+              src={listing.img}
+              alt={listing.title}
+              onError={(e) => (e.target.src = 'https://atlashomestorage.blob.core.windows.net/listing-images/fallback.jpeg')}
+              style={{ width: '100%', borderRadius: '0.5rem', height: '200px', objectFit: 'cover' }}
+            />
             <h2 style={{ fontSize: '1.25rem', margin: '0.75rem 0 0.5rem' }}>{listing.title}</h2>
             <p style={{ fontSize: '0.95rem', color: '#555' }}>{listing.desc}</p>
           </div>
