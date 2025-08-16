@@ -10,48 +10,54 @@ export default function ListingCard({ listing, prefillDates, prefillGuests }) {
   const [guests, setGuests] = useState(prefillGuests || 1);
 
   const canBook = range.from && range.to && guests > 0;
-  const label = range.from && range.to
-    ? `${format(range.from,'dd MMM')} → ${format(range.to,'dd MMM')}`
-    : 'Select dates';
 
   return (
-    <div className="card">
-      <img src={listing.imageUrl} alt={listing.title} className="hero" />
-      <h3>{listing.title}</h3>
-      <div className="muted">{listing.location}</div>
-      <div className="price">₹{listing.pricePerNight} / night</div>
-
-      <div className="controls">
-        <select value={guests} onChange={e => setGuests(Number(e.target.value))}>
-          {[...Array(6)].map((_,i) => <option key={i+1} value={i+1}>{i+1}</option>)}
-        </select>
-        <button className="date-btn" onClick={() => setOpenCal(v => !v)}>{label}</button>
+    <div className="lc-card">
+      <div className="lc-media">
+        <img src={listing.imageUrl} alt={listing.title} />
       </div>
-
-      {openCal && (
-        <div className="popover">
-          <DayPicker mode="range" selected={range} onSelect={setRange} />
+      <div className="lc-body">
+        <div className="lc-header">
+          <h3 className="lc-title">{listing.title}</h3>
+          <div className="lc-sub">{listing.location}</div>
+          <div className="lc-price">₹{listing.pricePerNight} / night</div>
         </div>
-      )}
 
-      <div className="availability">
-        {range.from && range.to ? <span>✅ Available</span> : <span>📅 Select dates</span>}
+        <div className="lc-controls">
+          <button className="lc-chip" onClick={() => setOpenCal(v => !v)}>
+            📅 {range.from && range.to ? `${format(range.from,'dd MMM')} → ${format(range.to,'dd MMM')}` : 'Dates'}
+          </button>
+
+          {openCal && (
+            <div className="lc-popover">
+              <DayPicker mode="range" selected={range} onSelect={setRange} />
+            </div>
+          )}
+
+          <select className="lc-select" value={guests} onChange={e => setGuests(Number(e.target.value))}>
+            {[...Array(6)].map((_,i) => <option key={i+1} value={i+1}>{i+1} Guest{i? 's':''}</option>)}
+          </select>
+
+          <div className={`lc-pill ${canBook ? 'ok' : 'muted'}`}>
+            {canBook ? 'Available' : 'Select dates'}
+          </div>
+
+          <button
+            className="btn-primary"
+            disabled={!canBook}
+            onClick={() => nav('/booking/summary', {
+              state: {
+                listingId: listing.id,
+                checkIn: range.from?.toISOString(),
+                checkOut: range.to?.toISOString(),
+                guests
+              }
+            })}
+          >
+            Book Now
+          </button>
+        </div>
       </div>
-
-      <button
-        className="primary"
-        disabled={!canBook}
-        onClick={() => nav('/booking/summary', {
-          state: {
-            listingId: listing.id,
-            checkIn: range.from?.toISOString(),
-            checkOut: range.to?.toISOString(),
-            guests
-          }
-        })}
-      >
-        Book Now
-      </button>
     </div>
   );
 }
