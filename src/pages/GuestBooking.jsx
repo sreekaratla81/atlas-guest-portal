@@ -47,15 +47,15 @@ const GuestBooking = () => {
     };
 
     const submit = async () => {
-          const guestRes = await axios.post(`${import.meta.env.VITE_API_BASE}/guests`, guest);
-          const guestId = guestRes.data.id;
-          const bookings = groupByListing();
-          for (let b of bookings) {
-              await axios.post(`${import.meta.env.VITE_API_BASE}/bookings`, { ...b, guestId });
-          }
-          navigate('/booking/confirmation', { state: { bookingSummary: bookings, extras: [] } });
-          setSelected([]);
-      };
+        const guestRes = await axios.post(`${import.meta.env.VITE_API_BASE}/guests`, guest);
+        const guestId = guestRes.data.id;
+        const bookings = groupByListing().map(b => ({ ...b, guestId }));
+        for (let b of bookings) {
+            await axios.post(`${import.meta.env.VITE_API_BASE}/bookings`, b);
+        }
+        navigate('/booking/confirmation', { state: { bookingSummary: bookings, extras: [] } });
+        setSelected([]);
+    };
 
     return (
         <div>
