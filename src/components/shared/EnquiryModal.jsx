@@ -7,19 +7,20 @@ const phoneRegex = /^\+?[1-9]\d{9,14}$/;
 
 export default function EnquiryModal({ onClose, listing, guests, preferredFrom, preferredTo }) {
   const [form, setForm] = useState({
-    name: '', phone: '', email: '',
-    message: ''
+    name: '', phone: '', email: '', message: ''
   });
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
   const [ok, setOk] = useState(false);
   const firstInput = useRef(null);
+
   useEffect(() => {
     firstInput.current?.focus();
     const onKey = (e) => { if (e.key === 'Escape') onClose(); };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, [onClose]);
+
   const prefDates = preferredFrom && preferredTo
     ? `${format(preferredFrom,'dd MMM yyyy')} → ${format(preferredTo,'dd MMM yyyy')}` : '';
 
@@ -37,7 +38,7 @@ export default function EnquiryModal({ onClose, listing, guests, preferredFrom, 
 
   const validate = () => {
     const errs = {};
-    ['phone','email'].forEach(key => {
+    ['phone', 'email'].forEach(key => {
       const err = validateField(key, form[key]);
       if (err) errs[key] = err;
     });
@@ -61,7 +62,7 @@ export default function EnquiryModal({ onClose, listing, guests, preferredFrom, 
       if (ENQUIRY_WEBHOOK) {
         const res = await fetch(ENQUIRY_WEBHOOK, {
           method: 'POST',
-          headers: { 'Content-Type':'application/json' },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
         if (!res.ok) throw new Error('webhook failed');
@@ -78,7 +79,7 @@ export default function EnquiryModal({ onClose, listing, guests, preferredFrom, 
         window.location.href = `mailto:${CONTACT.email}?subject=${subject}&body=${body}`;
         setOk(true);
       }
-      window.gtag?.('event','enquiry_submit',{listingId: listing.id});
+      window.gtag?.('event', 'enquiry_submit', { listingId: listing.id });
     } catch {
       alert('Could not send enquiry. Please try WhatsApp/Call/Email buttons.');
     } finally {
@@ -88,55 +89,7 @@ export default function EnquiryModal({ onClose, listing, guests, preferredFrom, 
 
   return (
     <div className="modal-backdrop" onClick={onClose}>
-      <div className="modal" onClick={e => e.stopPropagation()}>
-        <h3>Enquire about {listing.title}</h3>
-        {prefDates && <div className="muted">Preferred dates: {prefDates}</div>}
-        <form onSubmit={submit} className="modal-form">
-          <label>
-            Full name
-            <input
-              name="name"
-              type="text"
-              autoComplete="name"
-              ref={firstInput}
-              required
-              value={form.name}
-              onChange={e=>setForm(f=>({...f, name:e.target.value}))}
-            />
-          </label>
-          <label>
-            Phone
-            <input
-              name="phone"
-              type="tel"
-              autoComplete="tel"
-              aria-describedby="enq-phone-hint"
-              required
-              value={form.phone}
-              onChange={e=>setForm(f=>({...f, phone:e.target.value}))}
-            />
-            <span id="enq-phone-hint" className="hint">Include country code, e.g., +1 555-555-5555</span>
-          </label>
-          <label>
-            Email
-            <input
-              name="email"
-              type="email"
-              autoComplete="email"
-              required
-              value={form.email}
-              onChange={e=>setForm(f=>({...f, email:e.target.value}))}
-            />
-          </label>
-          <label>
-            Message (optional)
-            <textarea
-              name="message"
-              rows="3"
-              value={form.message}
-              onChange={e=>setForm(f=>({...f, message:e.target.value}))}
-            />
-          </label>
+      <div className="modal" onClick={(e) => e.stopPropagation()}>
         {ok ? (
           <div className="success">
             <h3>Thanks! We’ll contact you shortly.</h3>
@@ -146,19 +99,66 @@ export default function EnquiryModal({ onClose, listing, guests, preferredFrom, 
           <>
             <h3>Enquire about {listing.title}</h3>
             {prefDates && <div className="muted">Preferred dates: {prefDates}</div>}
-            <form onSubmit={submit} className="modal-form">
-              <label>Full name<input ref={firstInput} required value={form.name} onChange={handleChange('name')} /></label>
-              <label>Phone<input type="tel" required value={form.phone} onChange={handleChange('phone')} /></label>
+            <form onSubmit={submit} className="modal-form" noValidate>
+              <label>
+                Full name
+                <input
+                  name="name"
+                  type="text"
+                  autoComplete="name"
+                  ref={firstInput}
+                  required
+                  value={form.name}
+                  onChange={handleChange('name')}
+                />
+              </label>
+              <label>
+                Phone
+                <input
+                  name="phone"
+                  type="tel"
+                  autoComplete="tel"
+                  aria-describedby="enq-phone-hint"
+                  required
+                  value={form.phone}
+                  onChange={handleChange('phone')}
+                />
+                <span id="enq-phone-hint" className="hint">
+                  Include country code, e.g., +1 555-555-5555
+                </span>
+              </label>
               {errors.phone && <div className="error">{errors.phone}</div>}
-              <label>Email<input type="email" required value={form.email} onChange={handleChange('email')} /></label>
+              <label>
+                Email
+                <input
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  required
+                  value={form.email}
+                  onChange={handleChange('email')}
+                />
+              </label>
               {errors.email && <div className="error">{errors.email}</div>}
-              <label>Message (optional)<textarea rows="3" value={form.message} onChange={handleChange('message')} /></label>
-
-              <div className="notice-text">We’ll confirm availability and price over WhatsApp/phone. Online booking is coming soon.</div>
-
+              <label>
+                Message (optional)
+                <textarea
+                  name="message"
+                  rows="3"
+                  value={form.message}
+                  onChange={handleChange('message')}
+                />
+              </label>
+              <div className="notice-text">
+                We’ll confirm availability and price over WhatsApp/phone. Online booking is coming soon.
+              </div>
               <div className="modal-actions">
-                <button type="button" className="btn-ghost" onClick={onClose}>Cancel</button>
-                <button className="btn-primary" disabled={submitting}>{submitting ? 'Sending…' : 'Send Enquiry'}</button>
+                <button type="button" className="btn-ghost" onClick={onClose}>
+                  Cancel
+                </button>
+                <button className="btn-primary" disabled={submitting}>
+                  {submitting ? 'Sending…' : 'Send Enquiry'}
+                </button>
               </div>
             </form>
           </>
@@ -167,3 +167,4 @@ export default function EnquiryModal({ onClose, listing, guests, preferredFrom, 
     </div>
   );
 }
+
