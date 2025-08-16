@@ -1,16 +1,26 @@
 import { useParams } from 'react-router-dom';
-import { useState } from 'react';
-import { getListingById } from '../data/listings';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { API_BASE } from '../config';
 import { CONTACT } from '../config/siteConfig';
 import EnquiryModal from '../components/shared/EnquiryModal';
 import ContactStrip from '../components/shared/ContactStrip';
+import { formatAddress, getMapLink } from '../utils/address';
+import { useCurrency } from '../hooks/useCurrency';
 
 export default function ListingDetails() {
   const { id } = useParams();
-  const listing = getListingById(id);
+  const [listing, setListing] = useState(null);
   const [openEnquiry, setOpenEnquiry] = useState(false);
+  const { formatCurrency } = useCurrency();
 
-  if (!listing) return <p>Listing not found.</p>;
+  useEffect(() => {
+    axios.get(`${API_BASE}/listings/${id}`).then(res => {
+      setListing(res.data);
+    });
+  }, [id]);
+
+  if (!listing) return <p>Loading...</p>;
 
   const whatsappLink = (() => {
     const msg = encodeURIComponent(
@@ -19,15 +29,72 @@ export default function ListingDetails() {
     return `https://wa.me/${CONTACT.whatsappE164.replace('+','')}?text=${msg}`;
   })();
 
+  const formattedAddress = formatAddress(listing.address);
+  const mapLink = getMapLink(listing.address);
+
   return (
     <div className="card">
-      <div className="lc-media">
-        <img src={listing.imageUrl} alt={listing.title} />
+      <div className="lc-media position-relative">
+        {(() => {
+          const images = listing.images || listing.imageUrls || [listing.imageUrl];
+          const handleImageError = (e) => {
+            e.target.src = '/hero.jpg';
+          };
+          const prev = () => setImageIndex((imageIndex - 1 + images.length) % images.length);
+          const next = () => setImageIndex((imageIndex + 1) % images.length);
+          return (
+            <>
+              <img
+                src={images[imageIndex]}
+                alt={`${listing.title} image ${imageIndex + 1}`}
+                loading="lazy"
+                onError={handleImageError}
+              />
+              {images.length > 1 && (
+                <>
+                  <button className="carousel-control-prev" onClick={prev}>
+                    ‹
+                  </button>
+                  <button className="carousel-control-next" onClick={next}>
+                    ›
+                  </button>
+                </>
+              )}
+            </>
+          );
+        })()}
       </div>
       <div className="lc-body d-flex flex-column">
         <h3 className="lc-title">{listing.title}</h3>
-        <div className="lc-sub">{listing.location}</div>
+        <div className="lc-sub"><a href={mapLink} target="_blank" rel="noreferrer">{formattedAddress}</a></div>
         <div className="lc-price">₹{listing.pricePerNight} / night</div>
+        <div className="lc-sub">{listing.location}</div>
+        {listing.pricePerNight || listing.price ? (
+          <div className="lc-price">₹{listing.pricePerNight || listing.price} / night</div>
+        ) : null}
+        {listing.rating && <div className="lc-rating">Rating: {listing.rating}</div>}
+        {listing.amenities && listing.amenities.length > 0 && (
+          <div className="lc-amenities mt-3">
+            <h5>Amenities</h5>
+            <ul>
+              {listing.amenities.map((am) => (
+                <li key={am}>{am}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+        {listing.cancellationPolicy && (
+          <div className="lc-cancellation mt-3">
+            <h5>Cancellation Policy</h5>
+            <p>{listing.cancellationPolicy}</p>
+          </div>
+        )}
+        {listing.reviewScore && (
+          <div className="lc-review mt-3">
+            <h5>Review Score</h5>
+            <p>{listing.reviewScore}</p>
+          </div>
+        )}
       </div>
       {openEnquiry && (
         <EnquiryModal
