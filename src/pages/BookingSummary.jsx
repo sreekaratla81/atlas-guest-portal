@@ -2,6 +2,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { differenceInCalendarDays, format } from 'date-fns';
 import { useState } from 'react';
 import { getListingById } from '../data/listings';
+import { formatAddress } from '../utils/address';
 import { useCurrency } from '../hooks/useCurrency';
 import { BOOKING_WEBHOOK } from '../config/siteConfig';
 
@@ -114,7 +115,7 @@ export default function BookingSummary() {
         <img src={listing.imageUrl} alt={listing.title} />
         <div>
           <h3>{listing.title}</h3>
-          <div>{listing.location}</div>
+          <div>{formatAddress(listing.address)}</div>
           <div>Dates: {format(checkIn,'dd MMM yyyy')} → {format(checkOut,'dd MMM yyyy')} ({nights} night{nights>1?'s':''})</div>
           <div>Guests: {state.guests}</div>
           <div>Price: {formatCurrency(listing.pricePerNight)} × {nights} = <strong>{formatCurrency(total)}</strong></div>

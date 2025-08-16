@@ -5,6 +5,7 @@ import { API_BASE } from '../config';
 import { CONTACT } from '../config/siteConfig';
 import EnquiryModal from '../components/shared/EnquiryModal';
 import ContactStrip from '../components/shared/ContactStrip';
+import { formatAddress, getMapLink } from '../utils/address';
 import { useCurrency } from '../hooks/useCurrency';
 
 export default function ListingDetails() {
@@ -27,6 +28,9 @@ export default function ListingDetails() {
     );
     return `https://wa.me/${CONTACT.whatsappE164.replace('+','')}?text=${msg}`;
   })();
+
+  const formattedAddress = formatAddress(listing.address);
+  const mapLink = getMapLink(listing.address);
 
   return (
     <div className="card">
@@ -62,6 +66,8 @@ export default function ListingDetails() {
       </div>
       <div className="lc-body d-flex flex-column">
         <h3 className="lc-title">{listing.title}</h3>
+        <div className="lc-sub"><a href={mapLink} target="_blank" rel="noreferrer">{formattedAddress}</a></div>
+        <div className="lc-price">₹{listing.pricePerNight} / night</div>
         <div className="lc-sub">{listing.location}</div>
         {listing.pricePerNight || listing.price ? (
           <div className="lc-price">₹{listing.pricePerNight || listing.price} / night</div>

@@ -6,6 +6,7 @@ import { DayPicker } from 'react-day-picker';
 import { format } from 'date-fns';
 import EnquiryModal from '../shared/EnquiryModal';
 import { CONTACT } from '../../config/siteConfig';
+import { formatAddress, getMapLink } from '../../utils/address';
 import { useCurrency } from '../../hooks/useCurrency';
 import { fetchAvailability } from '../../services/availability';
 
@@ -66,8 +67,10 @@ export default function ListingCard({ listing, prefillDates, prefillGuests }) {
     return `https://wa.me/${CONTACT.whatsappE164.replace('+','')}?text=${msg}`;
   })();
 
-
+  
   const hasPref = range.from && range.to;
+  const formattedAddress = formatAddress(listing.address);
+  const mapLink = getMapLink(listing.address);
   const guideText = !range.from ? 'Select check-in date' : !range.to ? 'Select check-out date' : '';
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
 
@@ -79,6 +82,8 @@ export default function ListingCard({ listing, prefillDates, prefillGuests }) {
       <div className="lc-body">
         <div className="lc-header">
           <h3 className="lc-title"><Link to={`/listings/${listing.id}`}>{listing.title}</Link></h3>
+          <div className="lc-sub"><a href={mapLink} target="_blank" rel="noreferrer">{formattedAddress}</a></div>
+          <div className="lc-price">₹{listing.pricePerNight} / night</div>
           <div className="lc-sub">{listing.location}</div>
           <div className="lc-price">{formatCurrency(listing.pricePerNight)} / night</div>
         </div>
