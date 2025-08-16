@@ -37,6 +37,7 @@
         "prop-types": "^15.8.1",
         "storybook": "^9.1.2",
         "vite": "^5.0.0",
-        "vitest": "^3.2.4"
+        "vitest": "^3.2.4",
+        "@rollup/rollup-linux-x64-gnu": "4.43.0"
     }
 }
