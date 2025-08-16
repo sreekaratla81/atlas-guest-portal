@@ -4,6 +4,7 @@ import Header from './components/chrome/Header';
 import Footer from './components/chrome/Footer';
 import ListingDetails from './pages/ListingDetails';
 import Listings from './pages/Listings';
+import SafetyProtocols from './pages/SafetyProtocols';
 
 export default function AppRoutes() {
   return (
@@ -13,6 +14,7 @@ export default function AppRoutes() {
         <Route path="/" element={<HomePage />} />
         <Route path="/listings" element={<Listings />} />
         <Route path="/listings/:id" element={<ListingDetails />} />
+        <Route path="/safety-protocols" element={<SafetyProtocols />} />
       </Routes>
       <Footer />
     </>
