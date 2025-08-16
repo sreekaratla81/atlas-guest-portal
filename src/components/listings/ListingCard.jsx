@@ -90,7 +90,7 @@ export default function ListingCard({ listing, prefillDates, prefillGuests }) {
 
   const whatsappLink = (() => {
     const msg = encodeURIComponent(
-      `Hi ${CONTACT.companyName}, I'm interested in "${listing.title}".\n` +
+      `Hi ${CONTACT.companyName}, I'm interested in "${listing.title ?? listing.name ?? `Listing #${listing.id}`}".\n` +
       `Guests: ${guests}\n` +
       (preferredLabel ? `Preferred dates: ${preferredLabel}\n` : '') +
       `Please share availability and pricing.`
@@ -111,13 +111,15 @@ export default function ListingCard({ listing, prefillDates, prefillGuests }) {
   return (
     <div className="lc-card">
       <div className="lc-media">
-        <img src={listing.imageUrl} alt={listing.title} />
+        <img src={listing.imageUrl} alt={listing.title ?? listing.name ?? `Listing #${listing.id}`} />
       </div>
       <div className="lc-body">
         <div className="lc-header">
-          <h3 className="lc-title"><Link to={`/listings/${listing.id}`}>{listing.title}</Link></h3>
+          <h3 className="lc-title"><Link to={`/listings/${listing.id}`}>{listing.title ?? listing.name ?? `Listing #${listing.id}`}</Link></h3>
           <div className="lc-sub"><a href={mapLink} target="_blank" rel="noreferrer">{formattedAddress}</a></div>
+          {listing.pricePerNight != null && (
           <div className="lc-price">{formatCurrency(listing.pricePerNight)} / night</div>
+          )}
         </div>
 
         <div className="lc-controls">
@@ -186,7 +188,7 @@ export default function ListingCard({ listing, prefillDates, prefillGuests }) {
                 </a>
                 <a
                   className="icon-btn"
-                  href={`mailto:${CONTACT.email}?subject=${encodeURIComponent('Enquiry: ' + listing.title)}`}
+                  href={`mailto:${CONTACT.email}?subject=${encodeURIComponent('Enquiry: ' + (listing.title ?? listing.name ?? `Listing #${listing.id}`))}`}
                   aria-label="Email"
                   onClick={() => setShowActions(false)}
                 >
