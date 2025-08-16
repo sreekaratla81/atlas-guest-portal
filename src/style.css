@@ -46,3 +46,90 @@ body {
         grid-template-columns: repeat(2, 1fr);
     }
 }
+
+.sticky-bar {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  padding: 0.5rem;
+  background: #fff;
+  border-bottom: 1px solid #ddd;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.sticky-bar .date-btn,
+.sticky-bar select,
+.sticky-bar .primary {
+  height: 44px;
+}
+@media (max-width: 768px) {
+  .sticky-bar {
+    position: fixed;
+    bottom: 0;
+    top: auto;
+    width: 100%;
+  }
+}
+
+.card {
+  position: relative;
+}
+.card .hero {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 0.5rem;
+}
+.card .controls {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  align-items: center;
+}
+.card .date-btn {
+  flex: 1;
+  height: 44px;
+}
+.card .primary {
+  margin-top: 0.5rem;
+  height: 44px;
+}
+.popover {
+  position: absolute;
+  z-index: 20;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  padding: 0.5rem;
+}
+.primary {
+  background: #ff5a5f;
+  color: #fff;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+.primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.summary .row {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+.summary img {
+  width: 150px;
+  border-radius: 0.5rem;
+}
+.guest-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-width: 300px;
+}
+.guest-form input {
+  margin-top: 0.25rem;
+  padding: 0.5rem;
+}
