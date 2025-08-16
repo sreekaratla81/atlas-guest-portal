@@ -3,6 +3,7 @@ import StickyDateBar from '../components/search/StickyDateBar';
 import ListingCard from '../components/listings/ListingCard';
 import { listings } from '../data/listings';
 import { FEATURED_LISTING_IDS } from '../config/featured';
+import ReviewCarousel from '../components/reviews/ReviewCarousel';
 
 export default function HomePage() {
   const [filters, setFilters] = useState({ dates: { from: null, to: null }, guests: 1 });
