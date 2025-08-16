@@ -3,6 +3,7 @@ import StickyDateBar from '../components/search/StickyDateBar';
 import ListingCard from '../components/listings/ListingCard';
 import { listings } from '../data/listings';
 import { FEATURED_LISTING_IDS } from '../config/featured';
+import SafetyHighlights from '../components/safety/SafetyHighlights';
 
 export default function HomePage() {
   const [filters, setFilters] = useState({ dates: { from: null, to: null }, guests: 1 });
@@ -31,6 +32,11 @@ export default function HomePage() {
           </div>
         ))}
       </section>
+      <section className="reviews">
+        <h2>Guest Reviews</h2>
+        <p>Reviews coming soon.</p>
+      </section>
+      <SafetyHighlights />
     </div>
   );
 }
