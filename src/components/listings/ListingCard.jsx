@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 import PopoverPortal from '../shared/PopoverPortal';
 import { useOnClickOutside, useOnEsc } from '../../hooks/useOnClickOutside';
 import { DayPicker } from 'react-day-picker';
@@ -63,7 +64,7 @@ export default function ListingCard({ listing, prefillDates, prefillGuests }) {
       </div>
       <div className="lc-body">
         <div className="lc-header">
-          <h3 className="lc-title">{listing.title}</h3>
+          <h3 className="lc-title"><Link to={`/listings/${listing.id}`}>{listing.title}</Link></h3>
           <div className="lc-sub">{listing.location}</div>
           <div className="lc-price">₹{listing.pricePerNight} / night</div>
         </div>
@@ -94,20 +95,21 @@ export default function ListingCard({ listing, prefillDates, prefillGuests }) {
           </div>
 
           <div className="lc-actions">
-            <button className="btn-primary" onClick={() => setOpenEnquiry(true)}>
+            <button className="btn-dark" onClick={() => setOpenEnquiry(true)}>
               Enquire Now
             </button>
-            <a className="btn-ghost" href={whatsappLink} target="_blank" rel="noreferrer">
-              WhatsApp
+            <a className="icon-btn whatsapp" href={whatsappLink} target="_blank" rel="noreferrer" aria-label="WhatsApp">
+              <i className="fa-brands fa-whatsapp"></i>
             </a>
-            <a className="btn-ghost" href={`tel:${CONTACT.phoneE164}`}>
-              Call
+            <a className="icon-btn" href={`tel:${CONTACT.phoneE164}`} aria-label="Call">
+              <i className="fa-solid fa-phone"></i>
             </a>
             <a
-              className="btn-ghost"
+              className="icon-btn"
               href={`mailto:${CONTACT.email}?subject=${encodeURIComponent('Enquiry: ' + listing.title)}`}
+              aria-label="Email"
             >
-              Email
+              <i className="fa-solid fa-envelope"></i>
             </a>
           </div>
         </div>

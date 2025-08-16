@@ -11,9 +11,21 @@ export default function Header() {
           <a href="#contact">Contact</a>
         </nav>
         <div className="hdr__actions">
-          <a href={SOCIAL.whatsapp}>WhatsApp</a>
-          <a href={SOCIAL.phone}>Call</a>
-          <a href={SOCIAL.email}>Email</a>
+          <a href={SOCIAL.instagram} target="_blank" rel="noreferrer" aria-label="Instagram" className="icon-btn">
+            <i className="fa-brands fa-instagram"></i>
+          </a>
+          <a href={SOCIAL.facebook} target="_blank" rel="noreferrer" aria-label="Facebook" className="icon-btn">
+            <i className="fa-brands fa-facebook"></i>
+          </a>
+          <a href={SOCIAL.whatsapp} aria-label="WhatsApp" className="icon-btn whatsapp">
+            <i className="fa-brands fa-whatsapp"></i>
+          </a>
+          <a href={SOCIAL.phone} aria-label="Call" className="icon-btn">
+            <i className="fa-solid fa-phone"></i>
+          </a>
+          <a href={SOCIAL.email} aria-label="Email" className="icon-btn">
+            <i className="fa-solid fa-envelope"></i>
+          </a>
         </div>
       </div>
     </header>
