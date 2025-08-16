@@ -5,9 +5,10 @@ describe('Listing Card enquiry flow', () => {
       cy.get('select').select('2');
       cy.contains('Preferred dates').click();
     });
-    cy.get('.lc-popover .rdp-day:not(.rdp-day_disabled)').eq(0).click();
-    cy.get('.lc-popover .rdp-day:not(.rdp-day_disabled)').eq(4).click();
-    cy.contains('Enquire Now').click();
+    cy.get('.popover .rdp-day:not(.rdp-day_disabled)').eq(0).click();
+    cy.get('.popover .rdp-day:not(.rdp-day_disabled)').eq(4).click();
+    cy.contains('Book Now').click();
+    cy.contains('Enquire').click();
     cy.get('.modal').should('be.visible');
     cy.contains('Send Enquiry');
   });

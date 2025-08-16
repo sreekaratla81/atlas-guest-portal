@@ -10,20 +10,31 @@ const Listings = () => {
         axios.get(`${API_BASE}/listings`).then(res => setListings(res.data));
     }, []);
 
+    const handleImageError = (e) => {
+        e.target.src = '/hero.jpg';
+    };
+
     return (
         <div className="row">
             {listings.map(listing => (
                 <div className="col-md-4 mb-4" key={listing.id}>
                     <div className="card h-100">
                         <img
-                            src="https://via.placeholder.com/400x300?text=Listing"
+                            src={listing.imageUrl}
                             className="card-img-top"
-                            alt={listing.name}
+                            alt={listing.name || listing.title}
+                            loading="lazy"
+                            onError={handleImageError}
                             style={{ height: '470px', objectFit: 'cover' }}
                         />
                         <div className="card-body d-flex flex-column">
-                            <h5 className="card-title">{listing.name}</h5>
-                            <p className="card-text">Sleeps {listing.maxGuests} guests</p>
+                            <h5 className="card-title">{listing.name || listing.title}</h5>
+                            {listing.pricePerNight || listing.price ? (
+                                <p className="card-text">₹{listing.pricePerNight || listing.price} / night</p>
+                            ) : null}
+                            {listing.rating ? (
+                                <p className="card-text">Rating: {listing.rating}</p>
+                            ) : null}
                             <Link className="btn btn-primary mt-auto" to={`/listings/${listing.id}`}>View Details</Link>
                             <button className="btn btn-danger mt-2" style={{ backgroundColor: '#FF5A5F', borderColor: '#FF5A5F' }}>Reserve</button>
                         </div>
