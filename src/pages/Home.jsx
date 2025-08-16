@@ -123,6 +123,10 @@ const Home = () => {
             <h2 style={{ fontSize: '1.25rem', margin: '0.75rem 0 0.5rem' }}>{listing.title}</h2>
             <p style={{ fontSize: '0.95rem', color: '#555' }}>{listing.desc}</p>
             <button className="btn btn-primary" style={{ marginTop: 'auto' }}>
+            <button
+              className="btn btn-danger"
+              style={{ backgroundColor: '#D32F2F', borderColor: '#D32F2F', marginTop: 'auto' }}
+            >
               Reserve
             </button>
           </div>
