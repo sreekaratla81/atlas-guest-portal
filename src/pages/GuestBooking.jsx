@@ -10,7 +10,8 @@ const GuestBooking = () => {
     const [listings, setListings] = useState([]);
     const [selected, setSelected] = useState([]); // { listingId, date }
     const [guest, setGuest] = useState({ name: '', phone: '', email: '' });
-    const [locale, setLocale] = useState(enUS);
+    const [extras, setExtras] = useState({ airportPickup: false, localTours: false });
+    const [calendarDays, setCalendarDays] = useState([]);
 
     useEffect(() => {
         axios
@@ -54,6 +55,7 @@ const GuestBooking = () => {
         }
         alert("Booking submitted successfully");
         setSelected([]);
+        setExtras({ airportPickup: false, localTours: false });
     };
 
     return (
@@ -75,38 +77,32 @@ const GuestBooking = () => {
             ))}
             <div className="summary">
                 <h3>Guest Details</h3>
-                <label>
-                    Name
-                    <input
-                        name="name"
-                        type="text"
-                        autoComplete="name"
-                        value={guest.name}
-                        onChange={e => setGuest({ ...guest, name: e.target.value })}
-                    />
-                </label>
-                <label>
-                    Phone
-                    <input
-                        name="phone"
-                        type="tel"
-                        autoComplete="tel"
-                        aria-describedby="gb-phone-hint"
-                        value={guest.phone}
-                        onChange={e => setGuest({ ...guest, phone: e.target.value })}
-                    />
-                    <span id="gb-phone-hint" className="hint">Include country code, e.g., +1 555-555-5555</span>
-                </label>
-                <label>
-                    Email
-                    <input
-                        name="email"
-                        type="email"
-                        autoComplete="email"
-                        value={guest.email}
-                        onChange={e => setGuest({ ...guest, email: e.target.value })}
-                    />
-                </label>
+                <input placeholder='Name' value={guest.name} onChange={e => setGuest({ ...guest, name: e.target.value })} />
+                <input placeholder='Phone' value={guest.phone} onChange={e => setGuest({ ...guest, phone: e.target.value })} />
+                <input placeholder='Email' value={guest.email} onChange={e => setGuest({ ...guest, email: e.target.value })} />
+
+                <fieldset className="extras-section">
+                    <legend>Enhance Your Stay</legend>
+                    <label>
+                        <input
+                            type="checkbox"
+                            checked={extras.airportPickup}
+                            onChange={e => setExtras({ ...extras, airportPickup: e.target.checked })}
+                        />
+                        Airport Pickup - $30
+                        <span className="extra-desc"> Convenient ride from the airport.</span>
+                    </label>
+                    <label>
+                        <input
+                            type="checkbox"
+                            checked={extras.localTours}
+                            onChange={e => setExtras({ ...extras, localTours: e.target.checked })}
+                        />
+                        Local Tours - $50
+                        <span className="extra-desc"> Guided exploration of the city.</span>
+                    </label>
+                </fieldset>
+
                 <button onClick={submit}>Book Selected</button>
             </div>
         </div>
