@@ -1,0 +1,38 @@
+.btn {
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 8px;
+  border: none;
+  font-weight: 600;
+}
+
+.btn-primary {
+  background: var(--color-primary);
+  color: #fff;
+}
+.btn-primary:focus-visible {
+  outline: 2px solid rgba(79, 70, 229, 0.27);
+  outline-offset: 2px;
+}
+
+.btn-dark {
+  background: #111827;
+  color: #fff;
+}
+.btn-dark:focus-visible {
+  outline: 2px solid rgba(17, 24, 39, 0.27);
+  outline-offset: 2px;
+}
+
+.btn-ghost {
+  border: 1px solid #e5e7eb;
+  background: #fff;
+}
+.btn-ghost:hover {
+  background: #f9fafb;
+}
+
+.btn:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}

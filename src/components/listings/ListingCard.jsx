@@ -6,6 +6,7 @@ import { DayPicker } from 'react-day-picker';
 import { format } from 'date-fns';
 import EnquiryModal from '../shared/EnquiryModal';
 import { CONTACT } from '../../config/siteConfig';
+import { Button } from '../../ui';
 import { formatAddress, getMapLink } from '../../utils/address';
 import { useCurrency } from '../../hooks/useCurrency';
 import { fetchAvailability } from '../../services/availability';
@@ -20,6 +21,9 @@ export default function ListingCard({ listing, prefillDates, prefillGuests }) {
   const [range, setRange] = useState(prefillDates || { from: null, to: null });
   const [guests, setGuests] = useState(prefillGuests || 1);
   const [openEnquiry, setOpenEnquiry] = useState(false);
+  const { formatCurrency } = useCurrency();
+  const [showActions, setShowActions] = useState(false);
+  const [disabledDates, setDisabledDates] = useState([]);
   const [showActions, setShowActions] = useState(false);
 
   const [openUpsell, setOpenUpsell] = useState(false);
@@ -119,6 +123,8 @@ export default function ListingCard({ listing, prefillDates, prefillGuests }) {
       </div>
       <div className="lc-body">
         <div className="lc-header">
+          <h3 className="lc-title"><Link to={`/listings/${listing.id}`}>{listing.title}</Link></h3>
+          <div className="lc-sub"><a href={mapLink} target="_blank" rel="noreferrer">{formattedAddress}</a></div>
             <h2 className="lc-title"><Link to={`/listings/${listing.id}`}>{listing.title}</Link></h2>
           <div className="lc-sub">{listing.location}</div>
           <div className="lc-price">₹{listing.pricePerNight} / night</div>
@@ -154,8 +160,8 @@ export default function ListingCard({ listing, prefillDates, prefillGuests }) {
           <div className="lc-actions">
             {showActions ? (
               <>
-                <button
-                  className="btn-dark"
+                <Button
+                  variant="dark"
                   onClick={() => {
                     setOpenEnquiry(true);
                     setShowActions(false);
@@ -200,14 +206,14 @@ export default function ListingCard({ listing, prefillDates, prefillGuests }) {
                 </a>
               </>
             ) : (
-              <button
-                className="btn-dark"
+              <Button
+                variant="dark"
                 onClick={() => setShowActions(true)}
                 aria-haspopup="true"
                 aria-expanded={showActions}
               >
                 Book Now
-              </button>
+              </Button>
             )}
           </div>
         </div>

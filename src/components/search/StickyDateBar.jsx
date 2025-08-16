@@ -5,6 +5,7 @@ import { format } from 'date-fns';
 import { DayPicker } from 'react-day-picker';
 import 'react-day-picker/dist/style.css';
 import { fetchAvailability } from '../../services/availability';
+import { Button } from '../../ui';
 
 export default function StickyDateBar({ onSearch, initialDates, initialGuests, listingId }) {
   const [open, setOpen] = useState(false);
@@ -114,9 +115,9 @@ export default function StickyDateBar({ onSearch, initialDates, initialGuests, l
       <select className="sb-select" value={guests} onChange={e => setGuests(Number(e.target.value))}>
         {[...Array(6)].map((_,i)=> <option key={i+1} value={i+1}>{i+1} Guest{i? 's':''}</option>)}
       </select>
-      <button className="btn-primary" onClick={() => onSearch({ dates: range, guests })} disabled={!range.from || !range.to}>
+      <Button onClick={() => onSearch({ dates: range, guests })} disabled={!range.from || !range.to}>
         Search
-      </button>
+      </Button>
     </div>
   );
 }

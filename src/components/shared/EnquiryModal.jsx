@@ -1,6 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 import { format } from 'date-fns';
 import { CONTACT, ENQUIRY_WEBHOOK } from '../../config/siteConfig';
+import { Button } from '../../ui';
+
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const phoneRegex = /^\+?[1-9]\d{9,14}$/;
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const phoneRegex = /^\+?[1-9]\d{9,14}$/;
@@ -58,6 +62,7 @@ export default function EnquiryModal({ onClose, listing, guests, preferredFrom, 
 
   const submit = async (e) => {
     e.preventDefault();
+    if (!validate()) return;
     const errs = {
       name: validateField('name', form.name),
       phone: validateField('phone', form.phone),
@@ -82,6 +87,9 @@ export default function EnquiryModal({ onClose, listing, guests, preferredFrom, 
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
+        if (!res.ok) throw new Error('webhook failed');
+        const data = await res.json().catch(() => ({}));
+        setOk(data.reference || true);
         const result = await res.json().catch(() => ({}));
         if (!res.ok) {
           if (result.errors) setErrors(result.errors);
@@ -110,12 +118,18 @@ export default function EnquiryModal({ onClose, listing, guests, preferredFrom, 
 
   return (
     <div className="modal-backdrop" onClick={onClose}>
+      <div className="modal" onClick={(e) => e.stopPropagation()}>
       <div className="modal" onClick={e => e.stopPropagation()}>
           <h2>Enquire about {listing.title}</h2>
         {ok ? (
           <div className="success">
             <h3>Thanks! We’ll contact you shortly.</h3>
             {typeof ok === 'string' && <div>Reference: {ok}</div>}
+          </div>
+        ) : (
+          <form onSubmit={submit} className="modal-form" noValidate>
+            <h3>Enquire about {listing.title}</h3>
+            {prefDates && <div className="muted">Preferred dates: {prefDates}</div>}
           </div>
         ) : (
           <>
@@ -288,6 +302,14 @@ export default function EnquiryModal({ onClose, listing, guests, preferredFrom, 
                 We’ll confirm availability and price over WhatsApp/phone. Online booking is coming soon.
               </div>
               <div className="modal-actions">
+                <Button type="button" variant="ghost" onClick={onClose}>
+                  Cancel
+                </Button>
+                <Button variant="primary" disabled={submitting}>
+                  {submitting ? 'Sending…' : 'Send Enquiry'}
+                </Button>
+              </div>
+            </form>
                 <button type="button" className="btn-ghost" onClick={onClose}>
                   Cancel
                 </button>

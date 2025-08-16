@@ -1,3 +1,4 @@
+@import './ui/button.css';
 @import './styles/typography.css';
 
 :root {
@@ -52,6 +53,8 @@ section {
 
 /* Responsive grid */
 .grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 16px; }
+.card { grid-column: span 12; }
+@media (min-width: 1024px) {
 .card { grid-column: span 12; padding: 16px; margin-bottom: 16px; }
 @media (min-width: 900px) {
   .card--featured { grid-column: span 12; }
@@ -80,6 +83,9 @@ section {
 .lc-pill.ok { background:#d1fae5; color:#065f46; }
 
 .lc-actions { display:flex; flex-wrap:wrap; gap:8px; justify-content:flex-end; margin-top:8px; }
+.icon-btn { min-width:44px; min-height:44px; border:1px solid #e5e7eb; border-radius:6px; background:#fff; display:flex; align-items:center; justify-content:center; color:var(--color-primary); text-decoration:none; font-size:18px; }
+.icon-btn:hover { background:#f9fafb; }
+.icon-btn.whatsapp { color:var(--color-accent); }
 .btn { height:36px; padding:0 14px; border-radius:8px; border:none; font-weight:600; cursor:pointer; transition:background .2s; }
 .btn:disabled { opacity:.5; cursor:not-allowed; }
 .btn-primary { background:var(--color-primary); color:#fff; }
@@ -206,6 +212,13 @@ section {
 .ftr__social { display:flex; flex-direction:column; align-items:flex-end; }
 .ftr__follow { font-size:12px; color:#6b7280; margin-bottom:4px; }
 .ftr__links { display:flex; gap:16px; }
+.ftr__links .icon-btn { border:none; background:transparent; color:#6b7280; }
+.ftr__links .icon-btn:hover { color:#374151; }
+.reviews { text-align:center; margin-top:2rem; }
+.safety-highlights { margin-top:24px; }
+.safety-highlights ul { display:flex; justify-content:center; gap:32px; list-style:none; margin:0; padding:0; }
+.safety-item { text-align:center; color:#374151; text-decoration:none; }
+.safety-item i { font-size:32px; color:var(--color-primary); margin-bottom:8px; }
 .ftr__links .icon-btn { border:none; background:transparent; color:#9ca3af; }
 .ftr__links .icon-btn:hover { color:#fff; }
 
