@@ -1,8 +1,11 @@
 import { Routes, Route } from 'react-router-dom';
-import HomePage from './pages/HomePage';
 import Header from './components/chrome/Header';
 import Footer from './components/chrome/Footer';
+import HomePage from './pages/HomePage';
 import ListingDetails from './pages/ListingDetails';
+import GuestBooking from './pages/GuestBooking';
+import BookingSummary from './pages/BookingSummary';
+import BookingConfirmation from './pages/BookingConfirmation';
 import Listings from './pages/Listings';
 import SafetyProtocols from './pages/SafetyProtocols';
 
@@ -14,6 +17,9 @@ export default function AppRoutes() {
         <Route path="/" element={<HomePage />} />
         <Route path="/listings" element={<Listings />} />
         <Route path="/listings/:id" element={<ListingDetails />} />
+        <Route path="/guest-booking" element={<GuestBooking />} />
+        <Route path="/booking/summary" element={<BookingSummary />} />
+        <Route path="/booking/confirmation" element={<BookingConfirmation />} />
         <Route path="/safety-protocols" element={<SafetyProtocols />} />
       </Routes>
       <Footer />

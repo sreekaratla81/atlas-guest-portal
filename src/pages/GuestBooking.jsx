@@ -1,6 +1,7 @@
 // src/pages/GuestBooking.jsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import { DayPicker } from 'react-day-picker';
 import { format, parseISO } from 'date-fns';
 import { enUS } from 'date-fns/locale';
@@ -12,6 +13,7 @@ const GuestBooking = () => {
     const [guest, setGuest] = useState({ name: '', phone: '', email: '' });
     const [extras, setExtras] = useState({ airportPickup: false, localTours: false });
     const [calendarDays, setCalendarDays] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         axios
@@ -53,7 +55,7 @@ const GuestBooking = () => {
         for (let b of bookings) {
             await axios.post(`${import.meta.env.VITE_API_BASE}/bookings`, b);
         }
-        alert("Booking submitted successfully");
+        navigate('/booking/confirmation', { state: { bookingSummary: bookings, extras: [] } });
         setSelected([]);
         setExtras({ airportPickup: false, localTours: false });
     };
