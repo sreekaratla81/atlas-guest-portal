@@ -18,6 +18,14 @@ export default function ListingCard({ listing, prefillDates, prefillGuests }) {
   const [guests, setGuests] = useState(prefillGuests || 1);
   const [openEnquiry, setOpenEnquiry] = useState(false);
 
+  const [openUpsell, setOpenUpsell] = useState(false);
+  const upsellBtnRef = useRef(null);
+  const upsellPopRef = useRef(null);
+  useOnClickOutside([upsellBtnRef, upsellPopRef], () => setOpenUpsell(false));
+  useOnEsc(() => setOpenUpsell(false));
+  const [upsellCoords, setUpsellCoords] = useState({ top: 0, left: 0, width: 260 });
+  const [extras, setExtras] = useState({ airport: false, tours: false });
+
   const [coords, setCoords] = useState({ top: 0, left: 0, width: 320 });
   useEffect(() => {
     function position() {
@@ -56,6 +64,18 @@ export default function ListingCard({ listing, prefillDates, prefillGuests }) {
 
 
   const hasPref = range.from && range.to;
+
+  function toggleUpsell() {
+    const r = upsellBtnRef.current?.getBoundingClientRect();
+    if (r) {
+      setUpsellCoords({
+        top: r.bottom + 6,
+        left: Math.max(8, Math.min(r.left, window.innerWidth - upsellCoords.width - 20)),
+        width: upsellCoords.width
+      });
+    }
+    setOpenUpsell(v => !v);
+  }
 
   return (
     <div className="lc-card">
@@ -98,6 +118,13 @@ export default function ListingCard({ listing, prefillDates, prefillGuests }) {
             <button className="btn-dark" onClick={() => setOpenEnquiry(true)}>
               Enquire Now
             </button>
+            <button
+              ref={upsellBtnRef}
+              className="btn-light"
+              onClick={toggleUpsell}
+            >
+              Enhance your stay
+            </button>
             <a className="icon-btn whatsapp" href={whatsappLink} target="_blank" rel="noreferrer" aria-label="WhatsApp">
               <i className="fa-brands fa-whatsapp"></i>
             </a>
@@ -119,6 +146,33 @@ export default function ListingCard({ listing, prefillDates, prefillGuests }) {
         <PopoverPortal>
           <div ref={popRef} className="popover" style={{ top: coords.top, left: coords.left, width: coords.width }}>
             <DayPicker mode="range" selected={range} onSelect={setRange} />
+          </div>
+        </PopoverPortal>
+      )}
+
+      {openUpsell && (
+        <PopoverPortal>
+          <div
+            ref={upsellPopRef}
+            className="popover"
+            style={{ top: upsellCoords.top, left: upsellCoords.left, width: upsellCoords.width }}
+          >
+            <label>
+              <input
+                type="checkbox"
+                checked={extras.airport}
+                onChange={e => setExtras({ ...extras, airport: e.target.checked })}
+              />{' '}
+              Airport pickup
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                checked={extras.tours}
+                onChange={e => setExtras({ ...extras, tours: e.target.checked })}
+              />{' '}
+              Local tours
+            </label>
           </div>
         </PopoverPortal>
       )}
