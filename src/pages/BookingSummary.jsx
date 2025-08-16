@@ -105,7 +105,7 @@ export default function BookingSummary() {
       <form onSubmit={onProceed} className="guest-form">
         <label>Name<input name="name" value={form.name} onChange={handleChange('name')} required /></label>
         {errors.name && <div className="error">{errors.name}</div>}
-        <label>Phone<input name="phone" value={form.phone} onChange={handleChange('phone')} required /></label>
+        <label>Phone<input name="phone" type="tel" value={form.phone} onChange={handleChange('phone')} required /></label>
         {errors.phone && <div className="error">{errors.phone}</div>}
         <label>Email<input name="email" type="email" value={form.email} onChange={handleChange('email')} required /></label>
         {errors.email && <div className="error">{errors.email}</div>}

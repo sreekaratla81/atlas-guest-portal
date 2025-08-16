@@ -100,7 +100,7 @@ export default function EnquiryModal({ onClose, listing, guests, preferredFrom, 
             {prefDates && <div className="muted">Preferred dates: {prefDates}</div>}
             <form onSubmit={submit} className="modal-form">
               <label>Full name<input ref={firstInput} required value={form.name} onChange={handleChange('name')} /></label>
-              <label>Phone<input required value={form.phone} onChange={handleChange('phone')} /></label>
+              <label>Phone<input type="tel" required value={form.phone} onChange={handleChange('phone')} /></label>
               {errors.phone && <div className="error">{errors.phone}</div>}
               <label>Email<input type="email" required value={form.email} onChange={handleChange('email')} /></label>
               {errors.email && <div className="error">{errors.email}</div>}
