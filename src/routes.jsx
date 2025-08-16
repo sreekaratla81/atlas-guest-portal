@@ -1,12 +1,14 @@
 import { Routes, Route } from 'react-router-dom';
 import HomePage from './pages/HomePage';
-import BookingSummary from './pages/BookingSummary';
+import ContactStrip from './components/shared/ContactStrip';
 
 export default function AppRoutes() {
   return (
-    <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/booking/summary" element={<BookingSummary />} />
-    </Routes>
+    <>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+      </Routes>
+      <ContactStrip />
+    </>
   );
 }
