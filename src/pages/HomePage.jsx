@@ -3,6 +3,7 @@ import StickyDateBar from '../components/search/StickyDateBar';
 import ListingCard from '../components/listings/ListingCard';
 import { listings } from '../data/listings';
 import { FEATURED_LISTING_IDS } from '../config/featured';
+import ReviewCarousel from '../components/reviews/ReviewCarousel';
 
 export default function HomePage() {
   const [filters, setFilters] = useState({ dates: { from: null, to: null }, guests: 1 });
@@ -18,6 +19,7 @@ export default function HomePage() {
     <div className="container">
       <StickyDateBar onSearch={handleSearch} initialDates={filters.dates} initialGuests={filters.guests} />
       <div className="notice">Instant booking is not yet available. Submit an enquiry and we’ll confirm availability.</div>
+      <ReviewCarousel />
       <section className="grid">
         {featured.map(l => (
           <div key={`f-${l.id}`} className="card card--featured">
