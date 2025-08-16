@@ -9,13 +9,17 @@ const highlights = [
 
 export default function SafetyHighlights() {
   return (
-    <section className="safety-highlights">
-      {highlights.map(item => (
-        <Link key={item.label} to="/safety" className="safety-item">
-          <i className={item.icon}></i>
-          <span>{item.label}</span>
-        </Link>
-      ))}
+    <section className="safety-highlights" aria-label="Safety highlights">
+      <ul>
+        {highlights.map(item => (
+          <li key={item.label}>
+            <Link to="/safety-protocols" className="safety-item">
+              <i className={item.icon} aria-hidden="true"></i>
+              <span>{item.label}</span>
+            </Link>
+          </li>
+        ))}
+      </ul>
     </section>
   );
 }

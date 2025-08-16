@@ -12,7 +12,7 @@ export default function AppRoutes() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/listings/:id" element={<ListingDetails />} />
-        <Route path="/safety" element={<SafetyProtocols />} />
+        <Route path="/safety-protocols" element={<SafetyProtocols />} />
       </Routes>
       <Footer />
     </>
