@@ -1,8 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
 import { format } from 'date-fns';
 import { CONTACT, ENQUIRY_WEBHOOK } from '../../config/siteConfig';
+import { useTranslation } from 'react-i18next';
+import { dateLocales } from '../../i18n';
 
 export default function EnquiryModal({ onClose, listing, guests, preferredFrom, preferredTo }) {
+  const { i18n } = useTranslation();
+  const locale = dateLocales[i18n.language];
   const [form, setForm] = useState({
     name: '', phone: '', email: '',
     message: ''
@@ -17,7 +21,7 @@ export default function EnquiryModal({ onClose, listing, guests, preferredFrom, 
     return () => window.removeEventListener('keydown', onKey);
   }, [onClose]);
   const prefDates = preferredFrom && preferredTo
-    ? `${format(preferredFrom,'dd MMM yyyy')} → ${format(preferredTo,'dd MMM yyyy')}` : '';
+    ? `${format(preferredFrom,'P',{ locale })} → ${format(preferredTo,'P',{ locale })}` : '';
 
   const submit = async (e) => {
     e.preventDefault();

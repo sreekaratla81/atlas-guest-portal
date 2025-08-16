@@ -1,10 +1,14 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { differenceInCalendarDays, format } from 'date-fns';
 import { getListingById } from '../data/listings';
+import { useTranslation } from 'react-i18next';
+import { dateLocales } from '../i18n';
 
 export default function BookingSummary() {
   const { state } = useLocation();
   const nav = useNavigate();
+  const { t, i18n } = useTranslation();
+  const locale = dateLocales[i18n.language];
 
   if (!state?.listingId || !state?.checkIn || !state?.checkOut) {
     nav('/');
@@ -35,23 +39,23 @@ export default function BookingSummary() {
 
   return (
     <div className="summary">
-      <h2>Booking Summary</h2>
+      <h2>{t('bookingSummary.title')}</h2>
       <div className="row">
         <img src={listing.imageUrl} alt={listing.title} />
         <div>
           <h3>{listing.title}</h3>
           <div>{listing.location}</div>
-          <div>Dates: {format(checkIn,'dd MMM yyyy')} → {format(checkOut,'dd MMM yyyy')} ({nights} night{nights>1?'s':''})</div>
-          <div>Guests: {state.guests}</div>
-          <div>Price: ₹{listing.pricePerNight} × {nights} = <strong>₹{total}</strong></div>
+          <div>{t('bookingSummary.dates')}: {format(checkIn,'P',{ locale })} → {format(checkOut,'P',{ locale })} ({nights} night{nights>1?'s':''})</div>
+          <div>{t('bookingSummary.guests')}: {state.guests}</div>
+          <div>{t('bookingSummary.price')}: ₹{listing.pricePerNight} × {nights} = <strong>₹{total}</strong></div>
         </div>
       </div>
 
       <form onSubmit={onProceed} className="guest-form">
-        <label>Name<input name="name" required /></label>
-        <label>Phone<input name="phone" required /></label>
-        <label>Email<input name="email" type="email" required /></label>
-        <button className="primary" type="submit">Proceed to Pay</button>
+        <label>{t('bookingSummary.name')}<input name="name" required /></label>
+        <label>{t('bookingSummary.phone')}<input name="phone" required /></label>
+        <label>{t('bookingSummary.email')}<input name="email" type="email" required /></label>
+        <button className="primary" type="submit">{t('bookingSummary.proceed')}</button>
       </form>
     </div>
   );

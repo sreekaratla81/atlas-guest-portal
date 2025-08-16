@@ -1,14 +1,17 @@
 import { SOCIAL } from '../../config/social';
+import { useTranslation } from 'react-i18next';
 
 export default function Header() {
+  const { t, i18n } = useTranslation();
+
   return (
     <header className="hdr">
       <div className="hdr__wrap">
         <div className="brand">Atlas Homestays</div>
         <nav className="nav">
-          <a href="/">Home</a>
-          <a href="#about">About</a>
-          <a href="#contact">Contact</a>
+          <a href="/">{t('navigation.home')}</a>
+          <a href="#about">{t('navigation.about')}</a>
+          <a href="#contact">{t('navigation.contact')}</a>
         </nav>
         <div className="hdr__actions">
           <a href={SOCIAL.instagram} target="_blank" rel="noreferrer" aria-label="Instagram" className="icon-btn">
@@ -26,6 +29,14 @@ export default function Header() {
           <a href={SOCIAL.email} aria-label="Email" className="icon-btn">
             <i className="fa-solid fa-envelope"></i>
           </a>
+          <select
+            value={i18n.language}
+            onChange={e => i18n.changeLanguage(e.target.value)}
+            className="lang-select"
+          >
+            <option value="en">EN</option>
+            <option value="es">ES</option>
+          </select>
         </div>
       </div>
     </header>

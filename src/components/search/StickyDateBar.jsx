@@ -4,8 +4,12 @@ import { useOnClickOutside, useOnEsc } from '../../hooks/useOnClickOutside';
 import { format } from 'date-fns';
 import { DayPicker } from 'react-day-picker';
 import 'react-day-picker/dist/style.css';
+import { useTranslation } from 'react-i18next';
+import { dateLocales } from '../../i18n';
 
 export default function StickyDateBar({ onSearch, initialDates, initialGuests }) {
+  const { t, i18n } = useTranslation();
+  const locale = dateLocales[i18n.language];
   const [open, setOpen] = useState(false);
   const btnRef = useRef(null);
   const popRef = useRef(null);
@@ -32,8 +36,8 @@ export default function StickyDateBar({ onSearch, initialDates, initialGuests })
   }, [open]);
 
   const label = range.from && range.to
-    ? `${format(range.from,'dd MMM')} → ${format(range.to,'dd MMM')}`
-    : 'Preferred dates';
+    ? `${format(range.from,'P',{ locale })} → ${format(range.to,'P',{ locale })}`
+    : t('search.preferredDates');
 
   return (
     <div className="sb-wrap">
@@ -41,7 +45,7 @@ export default function StickyDateBar({ onSearch, initialDates, initialGuests })
         ref={btnRef}
         className="sb-chip"
         onClick={() => setOpen(v => !v)}
-        aria-label="Open preferred dates calendar"
+        aria-label={t('search.openCalendar')}
         aria-expanded={open}
       >
         {label}
@@ -49,15 +53,15 @@ export default function StickyDateBar({ onSearch, initialDates, initialGuests })
       {open && (
         <PopoverPortal>
           <div ref={popRef} className="popover" style={{ top: coords.top, left: coords.left, width: coords.width }}>
-            <DayPicker mode="range" selected={range} onSelect={setRange} />
+            <DayPicker mode="range" selected={range} onSelect={setRange} locale={locale} />
           </div>
         </PopoverPortal>
       )}
       <select className="sb-select" value={guests} onChange={e => setGuests(Number(e.target.value))}>
-        {[...Array(6)].map((_,i)=> <option key={i+1} value={i+1}>{i+1} Guest{i? 's':''}</option>)}
+        {[...Array(6)].map((_,i)=> <option key={i+1} value={i+1}>{t('common.guest', { count: i+1 })}</option>)}
       </select>
       <button className="btn-primary" onClick={() => onSearch({ dates: range, guests })} disabled={!range.from || !range.to}>
-        Search
+        {t('search.search')}
       </button>
     </div>
   );

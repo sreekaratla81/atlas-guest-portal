@@ -6,8 +6,12 @@ import { DayPicker } from 'react-day-picker';
 import { format } from 'date-fns';
 import EnquiryModal from '../shared/EnquiryModal';
 import { CONTACT } from '../../config/siteConfig';
+import { useTranslation } from 'react-i18next';
+import { dateLocales } from '../../i18n';
 
 export default function ListingCard({ listing, prefillDates, prefillGuests }) {
+  const { t, i18n } = useTranslation();
+  const locale = dateLocales[i18n.language];
   const [openCal, setOpenCal] = useState(false);
   const btnRef = useRef(null);
   const popRef = useRef(null);
@@ -41,7 +45,7 @@ export default function ListingCard({ listing, prefillDates, prefillGuests }) {
   }, [openCal]);
 
   const preferredLabel = range.from && range.to
-    ? `${format(range.from,'dd MMM')} → ${format(range.to,'dd MMM')}`
+    ? `${format(range.from,'P',{ locale })} → ${format(range.to,'P',{ locale })}`
     : '';
 
   const whatsappLink = (() => {
@@ -75,28 +79,28 @@ export default function ListingCard({ listing, prefillDates, prefillGuests }) {
               ref={btnRef}
               className="lc-chip"
               onClick={() => setOpenCal(v => !v)}
-              aria-label="Open preferred dates calendar"
+              aria-label={t('listingCard.openCalendar')}
               aria-expanded={openCal}
             >
-              📅 {hasPref ? preferredLabel : 'Preferred dates'}
+              📅 {hasPref ? preferredLabel : t('listingCard.preferredDates')}
             </button>
           </div>
 
           <select className="lc-select" value={guests} onChange={e => setGuests(Number(e.target.value))}>
             {[...Array(6)].map((_, i) => (
               <option key={i + 1} value={i + 1}>
-                {i + 1} Guest{i ? 's' : ''}
+                {t('common.guest', { count: i + 1 })}
               </option>
             ))}
           </select>
 
           <div className={`lc-pill ${hasPref ? 'ok' : 'muted'}`}>
-            {hasPref ? 'Dates noted (no instant booking)' : 'Add preferred dates'}
+            {hasPref ? t('listingCard.datesNoted') : t('listingCard.addPreferredDates')}
           </div>
 
           <div className="lc-actions">
             <button className="btn-dark" onClick={() => setOpenEnquiry(true)}>
-              Enquire Now
+              {t('listingCard.enquireNow')}
             </button>
             <a className="icon-btn whatsapp" href={whatsappLink} target="_blank" rel="noreferrer" aria-label="WhatsApp">
               <i className="fa-brands fa-whatsapp"></i>
@@ -118,7 +122,7 @@ export default function ListingCard({ listing, prefillDates, prefillGuests }) {
       {openCal && (
         <PopoverPortal>
           <div ref={popRef} className="popover" style={{ top: coords.top, left: coords.left, width: coords.width }}>
-            <DayPicker mode="range" selected={range} onSelect={setRange} />
+            <DayPicker mode="range" selected={range} onSelect={setRange} locale={locale} />
           </div>
         </PopoverPortal>
       )}

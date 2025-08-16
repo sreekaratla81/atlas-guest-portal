@@ -1,0 +1,33 @@
+{
+  "navigation": {
+    "home": "Home",
+    "about": "About",
+    "contact": "Contact"
+  },
+  "listingCard": {
+    "preferredDates": "Preferred dates",
+    "openCalendar": "Open preferred dates calendar",
+    "datesNoted": "Dates noted (no instant booking)",
+    "addPreferredDates": "Add preferred dates",
+    "enquireNow": "Enquire Now"
+  },
+  "search": {
+    "preferredDates": "Preferred dates",
+    "openCalendar": "Open preferred dates calendar",
+    "search": "Search"
+  },
+  "bookingSummary": {
+    "title": "Booking Summary",
+    "dates": "Dates",
+    "guests": "Guests",
+    "price": "Price",
+    "name": "Name",
+    "phone": "Phone",
+    "email": "Email",
+    "proceed": "Proceed to Pay"
+  },
+  "common": {
+    "guest": "{{count}} Guest",
+    "guest_plural": "{{count}} Guests"
+  }
+}

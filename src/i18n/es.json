@@ -1,0 +1,33 @@
+{
+  "navigation": {
+    "home": "Inicio",
+    "about": "Acerca de",
+    "contact": "Contacto"
+  },
+  "listingCard": {
+    "preferredDates": "Fechas preferidas",
+    "openCalendar": "Abrir calendario de fechas preferidas",
+    "datesNoted": "Fechas anotadas (sin reserva instantánea)",
+    "addPreferredDates": "Agregar fechas preferidas",
+    "enquireNow": "Consultar ahora"
+  },
+  "search": {
+    "preferredDates": "Fechas preferidas",
+    "openCalendar": "Abrir calendario de fechas preferidas",
+    "search": "Buscar"
+  },
+  "bookingSummary": {
+    "title": "Resumen de reserva",
+    "dates": "Fechas",
+    "guests": "Huéspedes",
+    "price": "Precio",
+    "name": "Nombre",
+    "phone": "Teléfono",
+    "email": "Correo electrónico",
+    "proceed": "Proceder al pago"
+  },
+  "common": {
+    "guest": "{{count}} huésped",
+    "guest_plural": "{{count}} huéspedes"
+  }
+}
