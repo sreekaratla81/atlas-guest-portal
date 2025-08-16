@@ -53,18 +53,6 @@ export default function ListingCard({ listing, prefillDates, prefillGuests }) {
     return `https://wa.me/${CONTACT.whatsappE164.replace('+','')}?text=${msg}`;
   })();
 
-  const telLink = `tel:${CONTACT.phoneE164}`;
-  const mailtoLink = (() => {
-    const subject = encodeURIComponent(`Enquiry: ${listing.title}`);
-    const body = encodeURIComponent(
-      `Hello ${CONTACT.companyName},\n\n` +
-      `I'm interested in "${listing.title}".\n` +
-      `Guests: ${guests}\n` +
-      (preferredLabel ? `Preferred dates: ${preferredLabel}\n` : '') +
-      `My details:\nName: \nPhone: \nEmail: \n\nThanks!`
-    );
-    return `mailto:${CONTACT.email}?subject=${subject}&body=${body}`;
-  })();
 
   const hasPref = range.from && range.to;
 
@@ -106,16 +94,19 @@ export default function ListingCard({ listing, prefillDates, prefillGuests }) {
           </div>
 
           <div className="lc-actions">
-            <button className="btn-primary" onClick={() => { setOpenEnquiry(true); window.gtag?.('event','enquiry_open',{listingId: listing.id}); }}>
+            <button className="btn-primary" onClick={() => setOpenEnquiry(true)}>
               Enquire Now
             </button>
             <a className="btn-ghost" href={whatsappLink} target="_blank" rel="noreferrer">
               WhatsApp
             </a>
-            <a className="btn-ghost" href={telLink}>
+            <a className="btn-ghost" href={`tel:${CONTACT.phoneE164}`}>
               Call
             </a>
-            <a className="btn-ghost" href={mailtoLink}>
+            <a
+              className="btn-ghost"
+              href={`mailto:${CONTACT.email}?subject=${encodeURIComponent('Enquiry: ' + listing.title)}`}
+            >
               Email
             </a>
           </div>
