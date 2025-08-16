@@ -26,6 +26,7 @@ const ListingDetails = () => {
                 <h3 className="card-title">{listing.name}</h3>
                 <p className="card-text">Type: {listing.type}</p>
                 <p className="card-text">Max Guests: {listing.maxGuests}</p>
+                <p className="card-text">₹{listing.pricePerNight} / night</p>
                 <div className="mt-2">
                     <button
                         type="button"
