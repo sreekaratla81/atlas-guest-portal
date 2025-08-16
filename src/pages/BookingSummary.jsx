@@ -17,10 +17,27 @@ export default function BookingSummary() {
   }
 
   const listing = getListingById(state.listingId);
-  const checkIn = new Date(state.checkIn);
-  const checkOut = new Date(state.checkOut);
+  const [form, setForm] = useState({
+    checkIn: state.checkIn,
+    checkOut: state.checkOut,
+    guests: state.guests,
+    name: '',
+    phone: '',
+    email: ''
+  });
+  const [step, setStep] = useState(1);
+
+  const checkIn = new Date(form.checkIn);
+  const checkOut = new Date(form.checkOut);
   const nights = Math.max(1, differenceInCalendarDays(checkOut, checkIn));
-  const total = nights * listing.pricePerNight;
+  const rate = listing.pricePerNight * nights;
+  const fees = Math.round(rate * 0.1);
+  const taxes = Math.round(rate * 0.12);
+  const total = rate + fees + taxes;
+
+  const handleChange = (e) => {
+    setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
+  };
 
   const [form, setForm] = useState({ name: '', phone: '', email: '' });
   const [errors, setErrors] = useState({});
@@ -96,9 +113,11 @@ export default function BookingSummary() {
         <div>
           <h3>{listing.title}</h3>
           <div>{listing.location}</div>
-          <div>Dates: {format(checkIn,'dd MMM yyyy')} → {format(checkOut,'dd MMM yyyy')} ({nights} night{nights>1?'s':''})</div>
-          <div>Guests: {state.guests}</div>
-          <div>Price: ₹{listing.pricePerNight} × {nights} = <strong>₹{total}</strong></div>
+          <div>
+            Dates: {format(checkIn, 'dd MMM yyyy')} → {format(checkOut, 'dd MMM yyyy')} ({nights} night{nights > 1 ? 's' : ''})
+          </div>
+          <div>Guests: {form.guests}</div>
+          <div>Price: ₹{listing.pricePerNight} × {nights} = <strong>₹{rate}</strong></div>
         </div>
       </div>
 
