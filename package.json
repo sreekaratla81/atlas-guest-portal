@@ -5,7 +5,7 @@
         "dev": "vite",
         "build": "vite build",
         "preview": "vite preview",
-        "test": "cypress run --headless"
+        "test": "sh -c 'node node_modules/vite/bin/vite.js build >/dev/null && node node_modules/vite/bin/vite.js preview --port 5173 & pid=$!; sleep 2; node node_modules/cypress/bin/cypress.js run --headless; kill $pid'"
     },
     "dependencies": {
         "axios": "^1.0.0",
