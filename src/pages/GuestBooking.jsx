@@ -1,12 +1,14 @@
 // src/pages/GuestBooking.jsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const GuestBooking = () => {
     const [listings, setListings] = useState([]);
     const [selected, setSelected] = useState([]);
     const [guest, setGuest] = useState({ name: '', phone: '', email: '' });
     const [calendarDays, setCalendarDays] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         axios.get(`${import.meta.env.VITE_API_BASE}/listings`).then(res => setListings(res.data));
@@ -45,15 +47,15 @@ const GuestBooking = () => {
     };
 
     const submit = async () => {
-        const guestRes = await axios.post(`${import.meta.env.VITE_API_BASE}/guests`, guest);
-        const guestId = guestRes.data.id;
-        const bookings = groupByListing().map(b => ({ ...b, guestId }));
-        for (let b of bookings) {
-            await axios.post(`${import.meta.env.VITE_API_BASE}/bookings`, b);
-        }
-        alert("Booking submitted successfully");
-        setSelected([]);
-    };
+          const guestRes = await axios.post(`${import.meta.env.VITE_API_BASE}/guests`, guest);
+          const guestId = guestRes.data.id;
+          const bookings = groupByListing();
+          for (let b of bookings) {
+              await axios.post(`${import.meta.env.VITE_API_BASE}/bookings`, { ...b, guestId });
+          }
+          navigate('/booking/confirmation', { state: { bookingSummary: bookings, extras: [] } });
+          setSelected([]);
+      };
 
     return (
         <div>
