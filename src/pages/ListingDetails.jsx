@@ -5,6 +5,8 @@ import { API_BASE } from '../config';
 import { CONTACT } from '../config/siteConfig';
 import EnquiryModal from '../components/shared/EnquiryModal';
 import ContactStrip from '../components/shared/ContactStrip';
+import StarRating from '../components/shared/StarRating';
+import ReviewCount from '../components/shared/ReviewCount';
 import { formatAddress, getMapLink } from '../utils/address';
 import { useCurrency } from '../hooks/useCurrency';
 
@@ -12,6 +14,7 @@ export default function ListingDetails() {
   const { id } = useParams();
   const [listing, setListing] = useState(null);
   const [openEnquiry, setOpenEnquiry] = useState(false);
+  const [imageIndex, setImageIndex] = useState(0);
   const { formatCurrency } = useCurrency();
 
   useEffect(() => {
@@ -66,13 +69,36 @@ export default function ListingDetails() {
       </div>
       <div className="lc-body d-flex flex-column">
         <h3 className="lc-title">{listing.title}</h3>
-        <div className="lc-sub"><a href={mapLink} target="_blank" rel="noreferrer">{formattedAddress}</a></div>
-        <div className="lc-price">₹{listing.pricePerNight} / night</div>
-        <div className="lc-sub">{listing.location}</div>
-        {listing.pricePerNight || listing.price ? (
-          <div className="lc-price">₹{listing.pricePerNight || listing.price} / night</div>
-        ) : null}
-        {listing.rating && <div className="lc-rating">Rating: {listing.rating}</div>}
+        {(listing.rating != null || listing.reviewCount != null) && (
+          <div className="d-flex align-items-center">
+            <StarRating rating={listing.rating} />
+            <ReviewCount count={listing.reviewCount} />
+          </div>
+        )}
+        <div className="lc-sub">
+          <a href={mapLink} target="_blank" rel="noreferrer">{formattedAddress}</a>
+        </div>
+        {(listing.pricePerNight || listing.price) && (
+          <div className="lc-price">
+            {formatCurrency(listing.pricePerNight || listing.price)} / night
+          </div>
+        )}
+        {listing.host && (
+          <div className="host-info">
+            <img src={listing.host.photoUrl} alt={listing.host.name} />
+            <div>
+              <div className="host-name">Hosted by {listing.host.name}</div>
+              {listing.host.bio && <div className="host-bio">{listing.host.bio}</div>}
+            </div>
+          </div>
+        )}
+        {(listing.refund || listing.houseRules || listing.policiesLink) && (
+          <div className="policies">
+            {listing.refund && <div><strong>Refund:</strong> {listing.refund}</div>}
+            {listing.houseRules && <div><strong>House rules:</strong> {listing.houseRules}</div>}
+            {listing.policiesLink && <a href={listing.policiesLink}>View full policies</a>}
+          </div>
+        )}
         {listing.amenities && listing.amenities.length > 0 && (
           <div className="lc-amenities mt-3">
             <h5>Amenities</h5>
@@ -115,3 +141,4 @@ export default function ListingDetails() {
     </div>
   );
 }
+

@@ -10,7 +10,17 @@ export const listings = [
       postalCode: '500072',
       country: 'IN'
     },
-    pricePerNight: 4500
+    pricePerNight: 4500,
+    rating: 4.8,
+    reviewCount: 42,
+    host: {
+      name: 'Anita Verma',
+      photoUrl: 'https://randomuser.me/api/portraits/women/44.jpg',
+      bio: 'Hyderabad local who loves hosting and sharing insider tips with guests.',
+    },
+    refund: 'Full refund up to 5 days before check‑in',
+    houseRules: 'No smoking or pets',
+    policiesLink: '/policies',
   },
   {
     id: 301,
@@ -23,7 +33,17 @@ export const listings = [
       postalCode: '500072',
       country: 'IN'
     },
-    pricePerNight: 3000
+    pricePerNight: 3000,
+    rating: 4.7,
+    reviewCount: 28,
+    host: {
+      name: 'Anita Verma',
+      photoUrl: 'https://randomuser.me/api/portraits/women/44.jpg',
+      bio: 'Hyderabad local who loves hosting and sharing insider tips with guests.',
+    },
+    refund: 'Full refund up to 5 days before check‑in',
+    houseRules: 'No smoking or pets',
+    policiesLink: '/policies',
   },
   {
     id: 302,
@@ -36,7 +56,17 @@ export const listings = [
       postalCode: '500072',
       country: 'IN'
     },
-    pricePerNight: 3200
+    pricePerNight: 3200,
+    rating: 4.6,
+    reviewCount: 31,
+    host: {
+      name: 'Anita Verma',
+      photoUrl: 'https://randomuser.me/api/portraits/women/44.jpg',
+      bio: 'Hyderabad local who loves hosting and sharing insider tips with guests.',
+    },
+    refund: 'Full refund up to 5 days before check‑in',
+    houseRules: 'No smoking or pets',
+    policiesLink: '/policies',
   },
   {
     id: 201,
@@ -49,7 +79,17 @@ export const listings = [
       postalCode: '500072',
       country: 'IN'
     },
-    pricePerNight: 2500
+    pricePerNight: 2500,
+    rating: 4.5,
+    reviewCount: 19,
+    host: {
+      name: 'Anita Verma',
+      photoUrl: 'https://randomuser.me/api/portraits/women/44.jpg',
+      bio: 'Hyderabad local who loves hosting and sharing insider tips with guests.',
+    },
+    refund: 'Full refund up to 5 days before check‑in',
+    houseRules: 'No smoking or pets',
+    policiesLink: '/policies',
   },
   {
     id: 202,
@@ -62,7 +102,17 @@ export const listings = [
       postalCode: '500072',
       country: 'IN'
     },
-    pricePerNight: 2600
+    pricePerNight: 2600,
+    rating: 4.5,
+    reviewCount: 21,
+    host: {
+      name: 'Anita Verma',
+      photoUrl: 'https://randomuser.me/api/portraits/women/44.jpg',
+      bio: 'Hyderabad local who loves hosting and sharing insider tips with guests.',
+    },
+    refund: 'Full refund up to 5 days before check‑in',
+    houseRules: 'No smoking or pets',
+    policiesLink: '/policies',
   },
   {
     id: 101,
@@ -75,7 +125,17 @@ export const listings = [
       postalCode: '500072',
       country: 'IN'
     },
-    pricePerNight: 2400
+    pricePerNight: 2400,
+    rating: 4.4,
+    reviewCount: 15,
+    host: {
+      name: 'Anita Verma',
+      photoUrl: 'https://randomuser.me/api/portraits/women/44.jpg',
+      bio: 'Hyderabad local who loves hosting and sharing insider tips with guests.',
+    },
+    refund: 'Full refund up to 5 days before check‑in',
+    houseRules: 'No smoking or pets',
+    policiesLink: '/policies',
   },
   {
     id: 102,
@@ -88,8 +148,19 @@ export const listings = [
       postalCode: '500072',
       country: 'IN'
     },
-    pricePerNight: 2300
+    pricePerNight: 2300,
+    rating: 4.3,
+    reviewCount: 12,
+    host: {
+      name: 'Anita Verma',
+      photoUrl: 'https://randomuser.me/api/portraits/women/44.jpg',
+      bio: 'Hyderabad local who loves hosting and sharing insider tips with guests.',
+    },
+    refund: 'Full refund up to 5 days before check‑in',
+    houseRules: 'No smoking or pets',
+    policiesLink: '/policies',
   }
 ];
 
 export const getListingById = (id) => listings.find(l => l.id === Number(id));
+
