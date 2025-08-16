@@ -6,6 +6,7 @@ import { DayPicker } from 'react-day-picker';
 import { format } from 'date-fns';
 import EnquiryModal from '../shared/EnquiryModal';
 import { CONTACT } from '../../config/siteConfig';
+import { Button } from '../../ui';
 
 export default function ListingCard({ listing, prefillDates, prefillGuests }) {
   const [openCal, setOpenCal] = useState(false);
@@ -95,9 +96,9 @@ export default function ListingCard({ listing, prefillDates, prefillGuests }) {
           </div>
 
           <div className="lc-actions">
-            <button className="btn-dark" onClick={() => setOpenEnquiry(true)}>
+            <Button variant="dark" onClick={() => setOpenEnquiry(true)}>
               Enquire Now
-            </button>
+            </Button>
             <a className="icon-btn whatsapp" href={whatsappLink} target="_blank" rel="noreferrer" aria-label="WhatsApp">
               <i className="fa-brands fa-whatsapp"></i>
             </a>

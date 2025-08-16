@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { format } from 'date-fns';
 import { CONTACT, ENQUIRY_WEBHOOK } from '../../config/siteConfig';
+import { Button } from '../../ui';
 
 export default function EnquiryModal({ onClose, listing, guests, preferredFrom, preferredTo }) {
   const [form, setForm] = useState({
@@ -72,8 +73,8 @@ export default function EnquiryModal({ onClose, listing, guests, preferredFrom, 
           <div className="notice-text">We’ll confirm availability and price over WhatsApp/phone. Online booking is coming soon.</div>
 
           <div className="modal-actions">
-            <button type="button" className="btn-ghost" onClick={onClose}>Cancel</button>
-            <button className="btn-primary" disabled={submitting}>{submitting ? 'Sending…' : 'Send Enquiry'}</button>
+            <Button type="button" variant="ghost" onClick={onClose}>Cancel</Button>
+            <Button variant="primary" disabled={submitting}>{submitting ? 'Sending…' : 'Send Enquiry'}</Button>
           </div>
           {ok && <div className="success">Thanks! We’ll contact you shortly.</div>}
         </form>
