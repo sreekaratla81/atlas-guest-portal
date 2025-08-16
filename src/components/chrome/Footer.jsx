@@ -1,33 +1,34 @@
 import { SOCIAL } from '../../config/social';
 
 export default function Footer() {
+  const socialLinks = [
+    { href: SOCIAL.instagram, icon: 'fa-instagram', label: 'Instagram' },
+    { href: SOCIAL.facebook, icon: 'fa-facebook', label: 'Facebook' },
+  ].filter(({ href }) => href);
+
   return (
     <footer className="ftr">
       <div className="ftr__wrap">
         <div>© {new Date().getFullYear()} Atlas Homestays • Hyderabad</div>
-        <div className="ftr__social">
-          <span className="ftr__follow">Follow us</span>
-          <div className="ftr__links">
-            <a
-              href={SOCIAL.instagram}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Instagram"
-              className="icon-btn"
-            >
-              <i className="fa-brands fa-instagram"></i>
-            </a>
-            <a
-              href={SOCIAL.facebook}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Facebook"
-              className="icon-btn"
-            >
-              <i className="fa-brands fa-facebook"></i>
-            </a>
+        {socialLinks.length > 0 && (
+          <div className="ftr__social">
+            <span className="ftr__follow">Follow us</span>
+            <div className="ftr__links">
+              {socialLinks.map(({ href, icon, label }) => (
+                <a
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={label}
+                  className="icon-btn"
+                >
+                  <i className={`fa-brands ${icon}`}></i>
+                </a>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </footer>
   );
