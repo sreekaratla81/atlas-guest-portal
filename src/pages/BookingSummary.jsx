@@ -1,6 +1,7 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { differenceInCalendarDays, format } from 'date-fns';
 import { getListingById } from '../data/listings';
+import { formatAddress } from '../utils/address';
 
 export default function BookingSummary() {
   const { state } = useLocation();
@@ -40,7 +41,7 @@ export default function BookingSummary() {
         <img src={listing.imageUrl} alt={listing.title} />
         <div>
           <h3>{listing.title}</h3>
-          <div>{listing.location}</div>
+          <div>{formatAddress(listing.address)}</div>
           <div>Dates: {format(checkIn,'dd MMM yyyy')} → {format(checkOut,'dd MMM yyyy')} ({nights} night{nights>1?'s':''})</div>
           <div>Guests: {state.guests}</div>
           <div>Price: ₹{listing.pricePerNight} × {nights} = <strong>₹{total}</strong></div>

@@ -6,6 +6,7 @@ import { DayPicker } from 'react-day-picker';
 import { format } from 'date-fns';
 import EnquiryModal from '../shared/EnquiryModal';
 import { CONTACT } from '../../config/siteConfig';
+import { formatAddress, getMapLink } from '../../utils/address';
 
 export default function ListingCard({ listing, prefillDates, prefillGuests }) {
   const [openCal, setOpenCal] = useState(false);
@@ -54,8 +55,10 @@ export default function ListingCard({ listing, prefillDates, prefillGuests }) {
     return `https://wa.me/${CONTACT.whatsappE164.replace('+','')}?text=${msg}`;
   })();
 
-
+  
   const hasPref = range.from && range.to;
+  const formattedAddress = formatAddress(listing.address);
+  const mapLink = getMapLink(listing.address);
 
   return (
     <div className="lc-card">
@@ -65,7 +68,7 @@ export default function ListingCard({ listing, prefillDates, prefillGuests }) {
       <div className="lc-body">
         <div className="lc-header">
           <h3 className="lc-title"><Link to={`/listings/${listing.id}`}>{listing.title}</Link></h3>
-          <div className="lc-sub">{listing.location}</div>
+          <div className="lc-sub"><a href={mapLink} target="_blank" rel="noreferrer">{formattedAddress}</a></div>
           <div className="lc-price">₹{listing.pricePerNight} / night</div>
         </div>
 
