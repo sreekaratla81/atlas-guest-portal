@@ -167,6 +167,11 @@ body {
   font-size: 0.9rem;
 }
 
+.extras-section legend {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
 .extra-desc {
   display: block;
   font-size: 0.8rem;

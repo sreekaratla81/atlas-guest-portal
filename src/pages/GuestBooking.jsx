@@ -46,7 +46,6 @@ const GuestBooking = () => {
     };
 
     const submit = async () => {
-        console.log('Extras selected:', extras);
         const guestRes = await axios.post(`${import.meta.env.VITE_API_BASE}/guests`, guest);
         const guestId = guestRes.data.id;
         const bookings = groupByListing().map(b => ({ ...b, guestId }));
@@ -90,8 +89,8 @@ const GuestBooking = () => {
                 <input placeholder='Phone' value={guest.phone} onChange={e => setGuest({ ...guest, phone: e.target.value })} />
                 <input placeholder='Email' value={guest.email} onChange={e => setGuest({ ...guest, email: e.target.value })} />
 
-                <div className="extras-section">
-                    <h4>Enhance Your Stay</h4>
+                <fieldset className="extras-section">
+                    <legend>Enhance Your Stay</legend>
                     <label>
                         <input
                             type="checkbox"
@@ -110,7 +109,7 @@ const GuestBooking = () => {
                         Local Tours - $50
                         <span className="extra-desc"> Guided exploration of the city.</span>
                     </label>
-                </div>
+                </fieldset>
 
                 <button onClick={submit}>Book Selected</button>
             </div>
