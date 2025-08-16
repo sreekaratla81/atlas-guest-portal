@@ -12,14 +12,31 @@ export default function HomePage() {
     setFilters({ dates, guests });
   };
 
+  const handleInstantBook = () => {
+    if (!filters.dates.from || !filters.dates.to) {
+      alert('Please select your dates to confirm availability.');
+      return;
+    }
+    alert('Starting instant reservation...');
+  };
+
   const featured = listings.filter(l => FEATURED_LISTING_IDS.includes(Number(l.id)));
   const others = listings.filter(l => !FEATURED_LISTING_IDS.includes(Number(l.id)));
 
   return (
     <div className="container">
       <StickyDateBar onSearch={handleSearch} initialDates={filters.dates} initialGuests={filters.guests} />
-      <div className="notice">Instant booking is not yet available. Submit an enquiry and we’ll confirm availability.</div>
-      <ReviewCarousel />
+      <button
+        className="btn-dark instant-btn"
+        onClick={handleInstantBook}
+        disabled={!filters.dates.from || !filters.dates.to}
+      >
+        Book Instantly
+      </button>
+      <div className="hero-banner">
+        <h1>Book Instantly</h1>
+        <p>Enjoy 24/7 support—trusted by over 5,000 guests.</p>
+      </div>
       <section className="grid">
         {featured.map(l => (
           <div key={`f-${l.id}`} className="card card--featured">
