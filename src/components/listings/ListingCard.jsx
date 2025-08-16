@@ -6,6 +6,7 @@ import { DayPicker } from 'react-day-picker';
 import { format } from 'date-fns';
 import EnquiryModal from '../shared/EnquiryModal';
 import { CONTACT } from '../../config/siteConfig';
+import { useCurrency } from '../../hooks/useCurrency';
 
 export default function ListingCard({ listing, prefillDates, prefillGuests }) {
   const [openCal, setOpenCal] = useState(false);
@@ -17,6 +18,7 @@ export default function ListingCard({ listing, prefillDates, prefillGuests }) {
   const [range, setRange] = useState(prefillDates || { from: null, to: null });
   const [guests, setGuests] = useState(prefillGuests || 1);
   const [openEnquiry, setOpenEnquiry] = useState(false);
+  const { formatCurrency } = useCurrency();
 
   const [coords, setCoords] = useState({ top: 0, left: 0, width: 320 });
   useEffect(() => {
@@ -66,7 +68,7 @@ export default function ListingCard({ listing, prefillDates, prefillGuests }) {
         <div className="lc-header">
           <h3 className="lc-title"><Link to={`/listings/${listing.id}`}>{listing.title}</Link></h3>
           <div className="lc-sub">{listing.location}</div>
-          <div className="lc-price">₹{listing.pricePerNight} / night</div>
+          <div className="lc-price">{formatCurrency(listing.pricePerNight)} / night</div>
         </div>
 
         <div className="lc-controls">

@@ -6,4 +6,9 @@ export const CONTACT = {
   companyName: 'Atlas Homestays'
 };
 
+export const CURRENCY = {
+  default: 'INR',
+  supported: ['INR', 'USD', 'EUR']
+};
+
 export const ENQUIRY_WEBHOOK = import.meta.env.VITE_ENQUIRY_WEBHOOK_URL || '';

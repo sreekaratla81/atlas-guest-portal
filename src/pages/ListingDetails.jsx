@@ -4,11 +4,13 @@ import { getListingById } from '../data/listings';
 import { CONTACT } from '../config/siteConfig';
 import EnquiryModal from '../components/shared/EnquiryModal';
 import ContactStrip from '../components/shared/ContactStrip';
+import { useCurrency } from '../hooks/useCurrency';
 
 export default function ListingDetails() {
   const { id } = useParams();
   const listing = getListingById(id);
   const [openEnquiry, setOpenEnquiry] = useState(false);
+  const { formatCurrency } = useCurrency();
 
   if (!listing) return <p>Listing not found.</p>;
 
@@ -27,7 +29,7 @@ export default function ListingDetails() {
       <div className="lc-body d-flex flex-column">
         <h3 className="lc-title">{listing.title}</h3>
         <div className="lc-sub">{listing.location}</div>
-        <div className="lc-price">₹{listing.pricePerNight} / night</div>
+        <div className="lc-price">{formatCurrency(listing.pricePerNight)} / night</div>
       </div>
       {openEnquiry && (
         <EnquiryModal

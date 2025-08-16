@@ -1,10 +1,12 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { differenceInCalendarDays, format } from 'date-fns';
 import { getListingById } from '../data/listings';
+import { useCurrency } from '../hooks/useCurrency';
 
 export default function BookingSummary() {
   const { state } = useLocation();
   const nav = useNavigate();
+  const { formatCurrency } = useCurrency();
 
   if (!state?.listingId || !state?.checkIn || !state?.checkOut) {
     nav('/');
@@ -43,7 +45,7 @@ export default function BookingSummary() {
           <div>{listing.location}</div>
           <div>Dates: {format(checkIn,'dd MMM yyyy')} → {format(checkOut,'dd MMM yyyy')} ({nights} night{nights>1?'s':''})</div>
           <div>Guests: {state.guests}</div>
-          <div>Price: ₹{listing.pricePerNight} × {nights} = <strong>₹{total}</strong></div>
+          <div>Price: {formatCurrency(listing.pricePerNight)} × {nights} = <strong>{formatCurrency(total)}</strong></div>
         </div>
       </div>
 
