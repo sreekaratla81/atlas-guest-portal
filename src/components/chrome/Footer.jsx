@@ -2,7 +2,7 @@ import { SOCIAL } from '../../config/social';
 
 export default function Footer() {
   return (
-    <footer className="ftr" id="contact">
+    <footer className="ftr">
       <div className="ftr__wrap">
         <div>© {new Date().getFullYear()} Atlas Homestays • Hyderabad</div>
         <div className="ftr__links">

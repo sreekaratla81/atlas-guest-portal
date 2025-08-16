@@ -12,7 +12,7 @@ export default function AppRoutes() {
         <Route path="/" element={<HomePage />} />
       </Routes>
       <Footer />
-      <ContactStrip />
+      {typeof window !== 'undefined' && window.innerWidth < 768 && <ContactStrip />}
     </>
   );
 }
