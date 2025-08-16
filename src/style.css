@@ -93,3 +93,20 @@ body {
   margin-top: 0.25rem;
   padding: 0.5rem;
 }
+.lc-actions { display:flex; gap:8px; align-items:center; justify-content:flex-end; }
+.btn-ghost { height:36px; padding:0 10px; border:1px solid #e5e7eb; border-radius:8px; background:#fff; text-decoration:none; display:flex; align-items:center; }
+.btn-ghost:hover { background:#f9fafb; }
+.btn-split { display:flex; gap:6px; }
+.notice-text { font-size:.85rem; color:#6b7280; margin-top:8px; }
+.modal-backdrop { position:fixed; inset:0; background:rgba(0,0,0,.35); display:flex; align-items:center; justify-content:center; z-index:50; }
+.modal { width:min(560px,92vw); background:#fff; border-radius:12px; padding:16px; box-shadow:0 10px 30px rgba(0,0,0,.2); }
+.modal-form { display:grid; gap:10px; margin-top:8px; }
+.modal-form label { display:grid; gap:6px; font-size:.92rem; }
+.modal-form input, .modal-form textarea { border:1px solid #e5e7eb; border-radius:8px; padding:8px; }
+.modal-actions { display:flex; gap:8px; justify-content:flex-end; margin-top:8px; }
+.success { margin-top:8px; color:#065f46; background:#ecfdf5; padding:8px; border-radius:8px; font-size:.9rem; }
+@media (max-width: 768px) {
+  .contact-strip { position:fixed; bottom:0; left:0; right:0; display:flex; justify-content:space-around; background:#111827; color:#fff; padding:10px; z-index:40; }
+  .contact-strip a { color:#fff; text-decoration:none; font-weight:600; }
+  body { padding-bottom:56px; }
+}

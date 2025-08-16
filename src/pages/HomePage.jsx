@@ -13,6 +13,7 @@ export default function HomePage() {
   return (
     <div>
       <StickyDateBar onSearch={handleSearch} initialDates={filters.dates} initialGuests={filters.guests} />
+      <div className="notice-text">Instant booking is not yet available. Submit an enquiry and we’ll confirm availability.</div>
       <div className="grid-wrap">
         {listings.map(l => (
           <ListingCard key={l.id} listing={l} prefillDates={filters.dates} prefillGuests={filters.guests} />

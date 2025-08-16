@@ -10,11 +10,11 @@ export default function StickyDateBar({ onSearch, initialDates, initialGuests })
 
   const label = range.from && range.to
     ? `${format(range.from,'dd MMM')} → ${format(range.to,'dd MMM')}`
-    : 'Select dates';
+    : 'Preferred dates';
 
   return (
     <div className="sb-wrap">
-      <button className="sb-chip" onClick={() => setOpenCal(v => !v)}>
+      <button className="sb-chip" aria-label="Open preferred dates calendar" onClick={() => setOpenCal(v => !v)}>
         {label}
       </button>
       {openCal && (
