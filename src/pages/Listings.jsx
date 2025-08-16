@@ -1,11 +1,26 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { API_BASE } from '../config';
+import ListingCard from '../components/listings/ListingCard';
+import ListingCard from '../components/listings/ListingCard';
+import { listings } from '../data/listings';
+import { useState } from 'react';
 
-const Listings = () => {
-    const [listings, setListings] = useState([]);
+export default function Listings() {
+  const [filters] = useState({ dates: { from: null, to: null }, guests: 1 });
 
+  return (
+    <div className="container">
+      <section className="grid">
+        {listings.map(l => (
+          <div key={l.id} className="card card--half">
+            <ListingCard listing={l} prefillDates={filters.dates} prefillGuests={filters.guests} />
+          </div>
+        ))}
+      </section>
+    </div>
+  );
+}
     useEffect(() => {
         axios.get(`${API_BASE}/listings`).then(res => setListings(res.data));
     }, []);
@@ -15,6 +30,12 @@ const Listings = () => {
     };
 
     return (
+        <div className="container">
+            <h1>Listings</h1>
+            <section className="grid">
+                {listings.map(listing => (
+                    <div key={listing.id} className="card card--half">
+                        <ListingCard listing={listing} />
         <div className="row">
             {listings.map(listing => (
                 <div className="col-md-4 mb-4" key={listing.id}>
@@ -36,11 +57,12 @@ const Listings = () => {
                                 <p className="card-text">Rating: {listing.rating}</p>
                             ) : null}
                             <Link className="btn btn-primary mt-auto" to={`/listings/${listing.id}`}>View Details</Link>
-                            <button className="btn btn-danger mt-2" style={{ backgroundColor: '#FF5A5F', borderColor: '#FF5A5F' }}>Reserve</button>
+                            <button className="btn btn-primary mt-2">Reserve</button>
+                            <button className="btn btn-danger mt-2" style={{ backgroundColor: '#D32F2F', borderColor: '#D32F2F' }}>Reserve</button>
                         </div>
                     </div>
-                </div>
-            ))}
+                ))}
+            </section>
         </div>
     );
 };

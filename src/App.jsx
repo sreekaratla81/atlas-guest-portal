@@ -4,6 +4,7 @@ import Home from './pages/Home';
 import GuestBooking from './pages/GuestBooking';
 import Listings from './pages/Listings';
 import ListingDetails from './pages/ListingDetails';
+import BookingConfirmation from './pages/BookingConfirmation';
 import Header from './components/chrome/Header';
 import Footer from './components/chrome/Footer';
 
@@ -17,6 +18,7 @@ function App() {
                     <Route path="/listings" element={<Listings />} />
                     <Route path="/listings/:id" element={<ListingDetails />} />
                     <Route path="/guest-booking" element={<GuestBooking />} />
+                    <Route path="/booking/confirmation" element={<BookingConfirmation />} />
                 </Routes>
             </main>
             <Footer />

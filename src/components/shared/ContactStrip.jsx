@@ -1,4 +1,5 @@
 import { Button } from '../../ui';
+import React from 'react';
 import { useCurrency } from '../../hooks/useCurrency';
 
 export default function ContactStrip({ price, whatsappLink, onEnquire }) {
