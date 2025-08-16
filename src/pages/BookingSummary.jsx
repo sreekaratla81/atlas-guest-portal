@@ -2,6 +2,10 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { differenceInCalendarDays, format } from 'date-fns';
 import { useState } from 'react';
 import { getListingById } from '../data/listings';
+import { BOOKING_WEBHOOK } from '../config/siteConfig';
+
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const phoneRegex = /^\+?[1-9]\d{9,14}$/;
 
 export default function BookingSummary() {
   const { state } = useLocation();
@@ -35,14 +39,71 @@ export default function BookingSummary() {
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const onPay = () => {
+  const [form, setForm] = useState({ name: '', phone: '', email: '' });
+  const [errors, setErrors] = useState({});
+  const [submitting, setSubmitting] = useState(false);
+  const [reference, setReference] = useState('');
+
+  const handleChange = (name) => (e) => {
+    const value = e.target.value;
+    setForm(f => ({ ...f, [name]: value }));
+    setErrors(err => ({ ...err, [name]: '' }));
+  };
+
+  const validate = () => {
+    const errs = {};
+    if (!phoneRegex.test(form.phone)) errs.phone = 'Enter a valid phone number';
+    if (!emailRegex.test(form.email)) errs.email = 'Enter a valid email address';
+    if (!form.name) errs.name = 'Name is required';
+    setErrors(errs);
+    return Object.keys(errs).length === 0;
+  };
+
+  const onProceed = async (e) => {
+    e.preventDefault();
+    if (!validate()) return;
+    setSubmitting(true);
     const payload = {
       listingId: listing.id,
-      ...form,
+      checkIn: state.checkIn,
+      checkOut: state.checkOut,
+      guests: state.guests,
+      name: form.name,
+      phone: form.phone,
+      email: form.email,
       amount: total
     };
-    console.log('Proceed to Pay (Razorpay in Phase 2)', payload);
+    try {
+      if (BOOKING_WEBHOOK) {
+        const res = await fetch(BOOKING_WEBHOOK, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        if (!res.ok) throw new Error('webhook failed');
+        const data = await res.json().catch(() => ({}));
+        setReference(data.reference || data.bookingRef || '');
+      } else {
+        alert('Booking submitted. Configure BOOKING_WEBHOOK to enable confirmations.');
+        setReference('TEMP');
+      }
+    } catch {
+      alert('Could not complete booking. Please try again.');
+    } finally {
+      setSubmitting(false);
+    }
   };
+
+  if (reference) {
+    return (
+      <div className="summary">
+        <h2>Booking Confirmed</h2>
+        <p>Your booking reference is <strong>{reference}</strong>.</p>
+        <p>We have sent a confirmation message. Our team will reach out with next steps.</p>
+        <button className="primary" onClick={() => nav('/')}>Back to Home</button>
+      </div>
+    );
+  }
 
   return (
     <div className="summary">
@@ -60,103 +121,15 @@ export default function BookingSummary() {
         </div>
       </div>
 
-      <div className="progress-bar">
-        <div className="bar" style={{ width: `${((step - 1) / 2) * 100}%` }} />
-      </div>
-      <div className="progress-steps">
-        <span className={step === 1 ? 'active' : ''}>Select Dates</span>
-        <span className={step === 2 ? 'active' : ''}>Details</span>
-        <span className={step === 3 ? 'active' : ''}>Pay</span>
-      </div>
-
-      {step === 1 && (
-        <form
-          className="guest-form"
-          onSubmit={(e) => {
-            e.preventDefault();
-            setStep(2);
-          }}
-        >
-          <label>
-            Check‑in
-            <input type="date" name="checkIn" value={form.checkIn} onChange={handleChange} required />
-          </label>
-          <label>
-            Check‑out
-            <input type="date" name="checkOut" value={form.checkOut} onChange={handleChange} required />
-          </label>
-          <div className="step-nav">
-            <button className="primary" type="submit">
-              Next
-            </button>
-          </div>
-        </form>
-      )}
-
-      {step === 2 && (
-        <form
-          className="guest-form"
-          onSubmit={(e) => {
-            e.preventDefault();
-            setStep(3);
-          }}
-        >
-          <label>
-            Name
-            <input name="name" value={form.name} onChange={handleChange} required />
-          </label>
-          <label>
-            Phone
-            <input name="phone" value={form.phone} onChange={handleChange} required />
-          </label>
-          <label>
-            Email
-            <input name="email" type="email" value={form.email} onChange={handleChange} required />
-          </label>
-          <div className="step-nav">
-            <button type="button" onClick={() => setStep(1)}>
-              Back
-            </button>
-            <button className="primary" type="submit">
-              Next
-            </button>
-          </div>
-        </form>
-      )}
-
-      {step === 3 && (
-        <div>
-          <div className="cost-breakdown">
-            <div>
-              <span>₹{listing.pricePerNight} × {nights} nights</span>
-              <span>₹{rate}</span>
-            </div>
-            <div>
-              <span>Fees</span>
-              <span>₹{fees}</span>
-            </div>
-            <div>
-              <span>Taxes</span>
-              <span>₹{taxes}</span>
-            </div>
-            <div className="total">
-              <span>Total</span>
-              <span>₹{total}</span>
-            </div>
-          </div>
-          <div className="badges">
-            <span className="badge">Secure payment via Razorpay</span>
-          </div>
-          <div className="step-nav">
-            <button type="button" onClick={() => setStep(2)}>
-              Back
-            </button>
-            <button className="primary" type="button" onClick={onPay}>
-              Pay Now
-            </button>
-          </div>
-        </div>
-      )}
+      <form onSubmit={onProceed} className="guest-form">
+        <label>Name<input name="name" value={form.name} onChange={handleChange('name')} required /></label>
+        {errors.name && <div className="error">{errors.name}</div>}
+        <label>Phone<input name="phone" type="tel" value={form.phone} onChange={handleChange('phone')} required /></label>
+        {errors.phone && <div className="error">{errors.phone}</div>}
+        <label>Email<input name="email" type="email" value={form.email} onChange={handleChange('email')} required /></label>
+        {errors.email && <div className="error">{errors.email}</div>}
+        <button className="primary" type="submit" disabled={submitting}>{submitting ? 'Submitting…' : 'Proceed to Pay'}</button>
+      </form>
     </div>
   );
 }
