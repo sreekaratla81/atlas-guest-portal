@@ -28,24 +28,30 @@ export default function ListingDetails() {
       </div>
       <div className="lc-body d-flex flex-column">
         <h3 className="lc-title">{listing.title}</h3>
-        <div className="d-flex align-items-center">
-          <StarRating rating={listing.rating} />
-          <ReviewCount count={listing.reviewCount} />
-        </div>
+        {(listing.rating != null || listing.reviewCount != null) && (
+          <div className="d-flex align-items-center">
+            <StarRating rating={listing.rating} />
+            <ReviewCount count={listing.reviewCount} />
+          </div>
+        )}
         <div className="lc-sub">{listing.location}</div>
         <div className="lc-price">₹{listing.pricePerNight} / night</div>
-        <div className="host-info">
-          <img src={listing.host.photoUrl} alt={listing.host.name} />
-          <div>
-            <div className="host-name">Hosted by {listing.host.name}</div>
-            <div className="host-bio">{listing.host.bio}</div>
+        {listing.host && (
+          <div className="host-info">
+            <img src={listing.host.photoUrl} alt={listing.host.name} />
+            <div>
+              <div className="host-name">Hosted by {listing.host.name}</div>
+              {listing.host.bio && <div className="host-bio">{listing.host.bio}</div>}
+            </div>
           </div>
-        </div>
-        <div className="policies">
-          <div><strong>Refund:</strong> {listing.refund}</div>
-          <div><strong>House rules:</strong> {listing.houseRules}</div>
-          <a href={listing.policiesLink}>View full policies</a>
-        </div>
+        )}
+        {(listing.refund || listing.houseRules || listing.policiesLink) && (
+          <div className="policies">
+            {listing.refund && <div><strong>Refund:</strong> {listing.refund}</div>}
+            {listing.houseRules && <div><strong>House rules:</strong> {listing.houseRules}</div>}
+            {listing.policiesLink && <a href={listing.policiesLink}>View full policies</a>}
+          </div>
+        )}
       </div>
       {openEnquiry && (
         <EnquiryModal
