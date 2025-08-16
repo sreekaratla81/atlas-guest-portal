@@ -75,9 +75,38 @@ const GuestBooking = () => {
             ))}
             <div className="summary">
                 <h3>Guest Details</h3>
-                <input placeholder='Name' value={guest.name} onChange={e => setGuest({ ...guest, name: e.target.value })} />
-                <input placeholder='Phone' value={guest.phone} onChange={e => setGuest({ ...guest, phone: e.target.value })} />
-                <input placeholder='Email' value={guest.email} onChange={e => setGuest({ ...guest, email: e.target.value })} />
+                <label>
+                    Name
+                    <input
+                        name="name"
+                        type="text"
+                        autoComplete="name"
+                        value={guest.name}
+                        onChange={e => setGuest({ ...guest, name: e.target.value })}
+                    />
+                </label>
+                <label>
+                    Phone
+                    <input
+                        name="phone"
+                        type="tel"
+                        autoComplete="tel"
+                        aria-describedby="gb-phone-hint"
+                        value={guest.phone}
+                        onChange={e => setGuest({ ...guest, phone: e.target.value })}
+                    />
+                    <span id="gb-phone-hint" className="hint">Include country code, e.g., +1 555-555-5555</span>
+                </label>
+                <label>
+                    Email
+                    <input
+                        name="email"
+                        type="email"
+                        autoComplete="email"
+                        value={guest.email}
+                        onChange={e => setGuest({ ...guest, email: e.target.value })}
+                    />
+                </label>
                 <button onClick={submit}>Book Selected</button>
             </div>
         </div>

@@ -123,6 +123,26 @@ export default function BookingSummary() {
       </div>
 
       <form onSubmit={onProceed} className="guest-form">
+        <label>
+          Name
+          <input name="name" type="text" autoComplete="name" required />
+        </label>
+        <label>
+          Phone
+          <input
+            name="phone"
+            type="tel"
+            autoComplete="tel"
+            aria-describedby="bs-phone-hint"
+            required
+          />
+          <span id="bs-phone-hint" className="hint">Include country code, e.g., +1 555-555-5555</span>
+        </label>
+        <label>
+          Email
+          <input name="email" type="email" autoComplete="email" required />
+        </label>
+        <button className="primary" type="submit">Proceed to Pay</button>
         <label>Name<input name="name" value={form.name} onChange={handleChange('name')} required /></label>
         {errors.name && <div className="error">{errors.name}</div>}
         <label>Phone<input name="phone" type="tel" value={form.phone} onChange={handleChange('phone')} required /></label>
