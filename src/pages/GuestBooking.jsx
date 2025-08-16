@@ -61,6 +61,33 @@ const GuestBooking = () => {
     };
 
     return (
+         <div>
+             <h1>📅 Multi-Listing Booking</h1>
+            <div className="calendar-grid">
+                <table>
+                    <thead>
+                        <tr><th>Listing</th>{calendarDays.map(d => <th key={d}>{d.slice(5)}</th>)}</tr>
+                    </thead>
+                    <tbody>
+                        {listings.map(l => (
+                            <tr key={l.id}>
+                                <td>{l.name}</td>
+                                {calendarDays.map(d => (
+                                    <td
+                                        key={d}
+                                        className={selected.find(x => x.listingId === l.id && x.date === d) ? 'selected' : 'cell'}
+                                        onClick={() => toggle(l.id, d)}
+                                    >
+                                        {selected.find(x => x.listingId === l.id && x.date === d) ? '✔' : ''}
+                                    </td>
+                                ))}
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+             <div className="summary">
+                 <h2>Guest Details</h2>
         <div>
             <h2>📅 Multi-Listing Booking</h2>
             {listings.map(l => (

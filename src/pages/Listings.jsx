@@ -1,3 +1,7 @@
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { API_BASE } from '../config';
+import ListingCard from '../components/listings/ListingCard';
 import ListingCard from '../components/listings/ListingCard';
 import { listings } from '../data/listings';
 import { useState } from 'react';
@@ -26,6 +30,12 @@ export default function Listings() {
     };
 
     return (
+        <div className="container">
+            <h1>Listings</h1>
+            <section className="grid">
+                {listings.map(listing => (
+                    <div key={listing.id} className="card card--half">
+                        <ListingCard listing={listing} />
         <div className="row">
             {listings.map(listing => (
                 <div className="col-md-4 mb-4" key={listing.id}>
@@ -51,8 +61,8 @@ export default function Listings() {
                             <button className="btn btn-danger mt-2" style={{ backgroundColor: '#D32F2F', borderColor: '#D32F2F' }}>Reserve</button>
                         </div>
                     </div>
-                </div>
-            ))}
+                ))}
+            </section>
         </div>
     );
 };

@@ -111,6 +111,7 @@ export default function EnquiryModal({ onClose, listing, guests, preferredFrom, 
   return (
     <div className="modal-backdrop" onClick={onClose}>
       <div className="modal" onClick={e => e.stopPropagation()}>
+          <h2>Enquire about {listing.title}</h2>
         {ok ? (
           <div className="success">
             <h3>Thanks! We’ll contact you shortly.</h3>

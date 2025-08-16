@@ -66,6 +66,15 @@ export default ListingDetails;
   const mapLink = getMapLink(listing.address);
 
   return (
+    <div className="card">
+      <div className="lc-media">
+        <img src={listing.imageUrl} alt={listing.title} />
+      </div>
+        <div className="lc-body d-flex flex-column">
+          <h1 className="lc-title">{listing.title}</h1>
+          <div className="lc-sub">{listing.location}</div>
+          <div className="lc-price">₹{listing.pricePerNight} / night</div>
+        </div>
     <>
       <Breadcrumb items={[{ label: 'Home', to: '/' }, { label: 'Listings', to: '/listings' }, { label: listing.title }]} />
       <div className="card">
