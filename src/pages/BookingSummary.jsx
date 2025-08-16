@@ -2,6 +2,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { differenceInCalendarDays, format } from 'date-fns';
 import { useState } from 'react';
 import { getListingById } from '../data/listings';
+import { useCurrency } from '../hooks/useCurrency';
 import { BOOKING_WEBHOOK } from '../config/siteConfig';
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -10,6 +11,7 @@ const phoneRegex = /^\+?[1-9]\d{9,14}$/;
 export default function BookingSummary() {
   const { state } = useLocation();
   const nav = useNavigate();
+  const { formatCurrency } = useCurrency();
 
   if (!state?.listingId || !state?.checkIn || !state?.checkOut) {
     nav('/');
@@ -113,11 +115,9 @@ export default function BookingSummary() {
         <div>
           <h3>{listing.title}</h3>
           <div>{listing.location}</div>
-          <div>
-            Dates: {format(checkIn, 'dd MMM yyyy')} → {format(checkOut, 'dd MMM yyyy')} ({nights} night{nights > 1 ? 's' : ''})
-          </div>
-          <div>Guests: {form.guests}</div>
-          <div>Price: ₹{listing.pricePerNight} × {nights} = <strong>₹{rate}</strong></div>
+          <div>Dates: {format(checkIn,'dd MMM yyyy')} → {format(checkOut,'dd MMM yyyy')} ({nights} night{nights>1?'s':''})</div>
+          <div>Guests: {state.guests}</div>
+          <div>Price: {formatCurrency(listing.pricePerNight)} × {nights} = <strong>{formatCurrency(total)}</strong></div>
         </div>
       </div>
 

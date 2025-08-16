@@ -5,12 +5,13 @@ import { API_BASE } from '../config';
 import { CONTACT } from '../config/siteConfig';
 import EnquiryModal from '../components/shared/EnquiryModal';
 import ContactStrip from '../components/shared/ContactStrip';
+import { useCurrency } from '../hooks/useCurrency';
 
 export default function ListingDetails() {
   const { id } = useParams();
   const [listing, setListing] = useState(null);
   const [openEnquiry, setOpenEnquiry] = useState(false);
-  const [imageIndex, setImageIndex] = useState(0);
+  const { formatCurrency } = useCurrency();
 
   useEffect(() => {
     axios.get(`${API_BASE}/listings/${id}`).then(res => {
