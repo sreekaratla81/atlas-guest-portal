@@ -9,6 +9,7 @@ export default function ListingDetails() {
   const { id } = useParams();
   const listing = getListingById(id);
   const [openEnquiry, setOpenEnquiry] = useState(false);
+  const [addonsOpen, setAddonsOpen] = useState(false);
 
   if (!listing) return <p>Listing not found.</p>;
 
@@ -28,6 +29,22 @@ export default function ListingDetails() {
         <h3 className="lc-title">{listing.title}</h3>
         <div className="lc-sub">{listing.location}</div>
         <div className="lc-price">₹{listing.pricePerNight} / night</div>
+        <div className="lc-addons">
+          <button
+            type="button"
+            className="lc-addons-toggle"
+            onClick={() => setAddonsOpen(!addonsOpen)}
+            aria-expanded={addonsOpen}
+          >
+            Add-ons available {addonsOpen ? '▲' : '▼'}
+          </button>
+          {addonsOpen && (
+            <ul className="lc-addons-list">
+              <li>Airport transfer</li>
+              <li>Local tour packages</li>
+            </ul>
+          )}
+        </div>
       </div>
       {openEnquiry && (
         <EnquiryModal
