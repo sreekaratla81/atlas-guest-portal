@@ -13,11 +13,11 @@ export default function HomePage() {
   return (
     <div>
       <StickyDateBar onSearch={handleSearch} initialDates={filters.dates} initialGuests={filters.guests} />
-      <section className="listings">
+      <div className="grid-wrap">
         {listings.map(l => (
           <ListingCard key={l.id} listing={l} prefillDates={filters.dates} prefillGuests={filters.guests} />
         ))}
-      </section>
+      </div>
     </div>
   );
 }

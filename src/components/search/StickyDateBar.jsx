@@ -13,21 +13,19 @@ export default function StickyDateBar({ onSearch, initialDates, initialGuests })
     : 'Select dates';
 
   return (
-    <div className="sticky-bar">
-      <button className="date-btn" onClick={() => setOpenCal(v => !v)}>{label}</button>
+    <div className="sb-wrap">
+      <button className="sb-chip" onClick={() => setOpenCal(v => !v)}>
+        {label}
+      </button>
       {openCal && (
-        <div className="popover">
+        <div className="sb-popover">
           <DayPicker mode="range" selected={range} onSelect={setRange} />
         </div>
       )}
-      <select value={guests} onChange={e => setGuests(Number(e.target.value))}>
-        {[...Array(6)].map((_,i) => <option key={i+1} value={i+1}>{i+1} Guest{i? 's':''}</option>)}
+      <select className="sb-select" value={guests} onChange={e => setGuests(Number(e.target.value))}>
+        {[...Array(6)].map((_,i)=> <option key={i+1} value={i+1}>{i+1} Guest{i? 's':''}</option>)}
       </select>
-      <button
-        className="primary"
-        onClick={() => onSearch({ dates: range, guests })}
-        disabled={!range.from || !range.to}
-      >
+      <button className="btn-primary" onClick={() => onSearch({ dates: range, guests })} disabled={!range.from || !range.to}>
         Search
       </button>
     </div>
