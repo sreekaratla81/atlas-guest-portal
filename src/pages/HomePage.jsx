@@ -1,23 +1,14 @@
-import { useState } from 'react';
-import StickyDateBar from '../components/search/StickyDateBar';
-import ListingCard from '../components/listings/ListingCard';
-import { listings } from '../data/listings';
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 export default function HomePage() {
-  const [filters, setFilters] = useState({ dates: { from: null, to: null }, guests: 1 });
-
-  const handleSearch = ({ dates, guests }) => {
-    setFilters({ dates, guests });
-  };
-
   return (
-    <div>
-      <StickyDateBar onSearch={handleSearch} initialDates={filters.dates} initialGuests={filters.guests} />
-      <section className="listings">
-        {listings.map(l => (
-          <ListingCard key={l.id} listing={l} prefillDates={filters.dates} prefillGuests={filters.guests} />
-        ))}
+    <main className="container">
+      <h1>Find your stay</h1>
+      <section className="grid">
+        {/* cards / hero / content */}
+        <Link to="/listings" className="btn">Browse Listings</Link>
       </section>
-    </div>
+    </main>
   );
 }
