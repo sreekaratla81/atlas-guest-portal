@@ -64,12 +64,44 @@ export default function EnquiryModal({ onClose, listing, guests, preferredFrom, 
         <h3>Enquire about {listing.title}</h3>
         {prefDates && <div className="muted">Preferred dates: {prefDates}</div>}
         <form onSubmit={submit} className="modal-form">
-          <label>Full name<input ref={firstInput} required value={form.name} onChange={e=>setForm(f=>({...f, name:e.target.value}))} /></label>
-          <label>Phone<input required value={form.phone} onChange={e=>setForm(f=>({...f, phone:e.target.value}))} /></label>
-          <label>Email<input type="email" required value={form.email} onChange={e=>setForm(f=>({...f, email:e.target.value}))} /></label>
-          <label>Message (optional)<textarea rows="3" value={form.message} onChange={e=>setForm(f=>({...f, message:e.target.value}))} /></label>
+          <label>
+            Full name
+            <input
+              ref={firstInput}
+              required
+              value={form.name}
+              onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
+            />
+          </label>
+          <label>
+            Phone
+            <input
+              required
+              value={form.phone}
+              onChange={e => setForm(f => ({ ...f, phone: e.target.value }))}
+            />
+          </label>
+          <label>
+            Email
+            <input
+              type="email"
+              required
+              value={form.email}
+              onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
+            />
+          </label>
+          <label>
+            Message (optional)
+            <textarea
+              rows="3"
+              value={form.message}
+              onChange={e => setForm(f => ({ ...f, message: e.target.value }))}
+            />
+          </label>
 
-          <div className="notice-text">We’ll confirm availability and price over WhatsApp/phone. Online booking is coming soon.</div>
+          <div className="notice-text">
+            We’ll confirm availability and price over WhatsApp/phone. Online booking is coming soon.
+          </div>
 
           <div className="modal-actions">
             <button type="button" className="btn-ghost" onClick={onClose}>Cancel</button>
