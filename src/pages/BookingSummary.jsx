@@ -2,10 +2,13 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { differenceInCalendarDays, format } from 'date-fns';
 import { useState } from 'react';
 import { getListingById } from '../data/listings';
+import { BOOKING_WEBHOOK } from '../config/siteConfig';
+
+// Displays a summary of the booking and confirms via webhook
+
 import { formatAddress } from '../utils/address';
 import { useCurrency } from '../hooks/useCurrency';
 import { BOOKING_WEBHOOK } from '../config/siteConfig';
-
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const phoneRegex = /^\+?[1-9]\d{9,14}$/;
 
@@ -28,6 +31,10 @@ export default function BookingSummary() {
     phone: '',
     email: ''
   });
+  const [errors, setErrors] = useState({});
+  const [touched, setTouched] = useState({});
+  const [submitting, setSubmitting] = useState(false);
+  const [reference, setReference] = useState('');
   const [step, setStep] = useState(1);
 
   const checkIn = new Date(form.checkIn);
@@ -38,6 +45,43 @@ export default function BookingSummary() {
   const taxes = Math.round(rate * 0.12);
   const total = rate + fees + taxes;
 
+  const validateField = (name, value) => {
+    if (name === 'name' && !value.trim()) return 'Name is required';
+    if (name === 'email' && !emailRegex.test(value)) return 'Enter a valid email address';
+    if (name === 'phone' && !phoneRegex.test(value)) return 'Enter a valid phone number';
+    return '';
+  };
+
+  const handleChange = (name) => (e) => {
+    const value = e.target.value;
+    setForm(f => ({ ...f, [name]: value }));
+    if (touched[name]) {
+      setErrors(err => ({ ...err, [name]: validateField(name, value) }));
+    }
+  };
+
+  const handleBlur = (name) => (e) => {
+    const value = e.target.value;
+    setTouched(t => ({ ...t, [name]: true }));
+    setErrors(err => ({ ...err, [name]: validateField(name, value) }));
+  };
+
+  const onProceed = async (e) => {
+    e.preventDefault();
+    const errs = {
+      name: validateField('name', form.name),
+      phone: validateField('phone', form.phone),
+      email: validateField('email', form.email)
+    };
+    setErrors(errs);
+    setTouched({ name: true, phone: true, email: true });
+    if (Object.values(errs).some(Boolean)) return;
+    setSubmitting(true);
+    const payload = {
+      listingId: listing.id,
+      checkIn: form.checkIn,
+      checkOut: form.checkOut,
+      guests: form.guests,
   const handleChange = (e) => {
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
@@ -83,6 +127,13 @@ export default function BookingSummary() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          if (data.errors) setErrors(data.errors);
+          else throw new Error('webhook failed');
+        } else {
+          setReference(data.reference || data.bookingRef || '');
+        }
         if (!res.ok) throw new Error('webhook failed');
         const data = await res.json().catch(() => ({}));
         setReference(data.reference || data.bookingRef || '');
@@ -115,6 +166,17 @@ export default function BookingSummary() {
         <img src={listing.imageUrl} alt={listing.title} />
         <div>
           <h3>{listing.title}</h3>
+          <div>{listing.location}</div>
+          <div>
+            Dates: {format(checkIn, 'dd MMM yyyy')} → {format(checkOut, 'dd MMM yyyy')} ({nights} night{nights > 1 ? 's' : ''})
+          </div>
+          <div>Guests: {form.guests}</div>
+          <div>Price: ₹{listing.pricePerNight} × {nights} = <strong>₹{rate}</strong></div>
+          <div className="cost-breakdown">
+            <div>Fees<span>₹{fees}</span></div>
+            <div>Taxes<span>₹{taxes}</span></div>
+            <div className="total">Total<span>₹{total}</span></div>
+          </div>
           <div>{formatAddress(listing.address)}</div>
           <div>Dates: {format(checkIn,'dd MMM yyyy')} → {format(checkOut,'dd MMM yyyy')} ({nights} night{nights>1?'s':''})</div>
           <div>Guests: {state.guests}</div>
@@ -123,6 +185,9 @@ export default function BookingSummary() {
       </div>
 
       <form onSubmit={onProceed} className="guest-form">
+        <label>Name<input name="name" required value={form.name} onChange={handleChange('name')} onBlur={handleBlur('name')} className={errors.name ? 'error' : touched.name && !errors.name ? 'success' : ''} />{errors.name && <span className="field-error">{errors.name}</span>}{touched.name && !errors.name && <span className="field-success">✓</span>}</label>
+        <label>Phone<input name="phone" type="tel" required value={form.phone} onChange={handleChange('phone')} onBlur={handleBlur('phone')} className={errors.phone ? 'error' : touched.phone && !errors.phone ? 'success' : ''} />{errors.phone && <span className="field-error">{errors.phone}</span>}{touched.phone && !errors.phone && <span className="field-success">✓</span>}</label>
+        <label>Email<input name="email" type="email" required value={form.email} onChange={handleChange('email')} onBlur={handleBlur('email')} className={errors.email ? 'error' : touched.email && !errors.email ? 'success' : ''} />{errors.email && <span className="field-error">{errors.email}</span>}{touched.email && !errors.email && <span className="field-success">✓</span>}</label>
         <label>
           Name
           <input name="name" type="text" autoComplete="name" required />
