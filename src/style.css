@@ -140,6 +140,17 @@ body {
 .nav a { margin:0 8px; color:#374151; text-decoration:none; }
 .hdr__actions { display:flex; gap:10px; }
 
+.nav__item { position:relative; display:inline-block; }
+.nav__item > button { background:none; border:none; margin:0 8px; color:#374151; cursor:pointer; }
+.nav__submenu { position:absolute; top:100%; left:0; background:#fff; border:1px solid #e5e7eb; border-radius:8px; padding:4px 0; box-shadow:0 4px 10px rgba(0,0,0,.05); }
+.nav__submenu li a { display:block; padding:6px 12px; color:#374151; text-decoration:none; }
+.nav__submenu li a:hover, .nav__submenu li a:focus { background:#f3f4f6; }
+
+.breadcrumb { display:flex; gap:4px; font-size:.85rem; margin:8px 0; }
+.breadcrumb li::after { content:'>'; margin-left:4px; }
+.breadcrumb li:last-child::after { content:''; }
+.breadcrumb a { text-decoration:none; color:#374151; }
+
 .hdr__actions .icon-btn { border:none; background:transparent; color:#4b5563; }
 .hdr__actions .icon-btn:hover { color:#111827; }
 

@@ -4,6 +4,7 @@ import { getListingById } from '../data/listings';
 import { CONTACT } from '../config/siteConfig';
 import EnquiryModal from '../components/shared/EnquiryModal';
 import ContactStrip from '../components/shared/ContactStrip';
+import Breadcrumb from '../components/shared/Breadcrumb';
 
 export default function ListingDetails() {
   const { id } = useParams();
@@ -20,12 +21,14 @@ export default function ListingDetails() {
   })();
 
   return (
-    <div className="card">
-      <div className="lc-media">
-        <img src={listing.imageUrl} alt={listing.title} />
-      </div>
-      <div className="lc-body d-flex flex-column">
-        <h3 className="lc-title">{listing.title}</h3>
+    <>
+      <Breadcrumb items={[{ label: 'Home', to: '/' }, { label: 'Listings', to: '/listings' }, { label: listing.title }]} />
+      <div className="card">
+        <div className="lc-media">
+          <img src={listing.imageUrl} alt={listing.title} />
+        </div>
+        <div className="lc-body d-flex flex-column">
+          <h3 className="lc-title">{listing.title}</h3>
         <div className="lc-sub">{listing.location}</div>
         <div className="lc-price">₹{listing.pricePerNight} / night</div>
       </div>
@@ -46,5 +49,6 @@ export default function ListingDetails() {
         />
       )}
     </div>
+    </>
   );
 }
