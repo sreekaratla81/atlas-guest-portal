@@ -34,12 +34,12 @@ export default function BookingSummary() {
   };
 
   return (
-    <div className="summary">
-      <h2>Booking Summary</h2>
+      <div className="summary">
+        <h1>Booking Summary</h1>
       <div className="row">
         <img src={listing.imageUrl} alt={listing.title} />
         <div>
-          <h3>{listing.title}</h3>
+            <h2>{listing.title}</h2>
           <div>{listing.location}</div>
           <div>Dates: {format(checkIn,'dd MMM yyyy')} → {format(checkOut,'dd MMM yyyy')} ({nights} night{nights>1?'s':''})</div>
           <div>Guests: {state.guests}</div>

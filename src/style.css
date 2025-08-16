@@ -1,3 +1,5 @@
+@import './styles/typography.css';
+
 :root {
     --color-primary: #4F46E5;
     --color-accent: #10B981;
@@ -5,6 +7,11 @@
 
 body {
     font-family: 'Inter', sans-serif;
+}
+
+section {
+    margin: 2rem 0;
+    padding: 1rem 0;
 }
 
 .site-header {
@@ -31,7 +38,7 @@ body {
 
 /* Responsive grid */
 .grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 16px; }
-.card { grid-column: span 12; }
+.card { grid-column: span 12; padding: 16px; margin-bottom: 16px; }
 @media (min-width: 900px) {
   .card--featured { grid-column: span 12; }
   .card--half { grid-column: span 6; }

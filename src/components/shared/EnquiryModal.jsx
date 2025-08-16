@@ -61,7 +61,7 @@ export default function EnquiryModal({ onClose, listing, guests, preferredFrom, 
   return (
     <div className="modal-backdrop" onClick={onClose}>
       <div className="modal" onClick={e => e.stopPropagation()}>
-        <h3>Enquire about {listing.title}</h3>
+          <h2>Enquire about {listing.title}</h2>
         {prefDates && <div className="muted">Preferred dates: {prefDates}</div>}
         <form onSubmit={submit} className="modal-form">
           <label>Full name<input ref={firstInput} required value={form.name} onChange={e=>setForm(f=>({...f, name:e.target.value}))} /></label>

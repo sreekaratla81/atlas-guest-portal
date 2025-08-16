@@ -56,8 +56,8 @@ const GuestBooking = () => {
     };
 
     return (
-        <div>
-            <h2>📅 Multi-Listing Booking</h2>
+         <div>
+             <h1>📅 Multi-Listing Booking</h1>
             <div className="calendar-grid">
                 <table>
                     <thead>
@@ -81,8 +81,8 @@ const GuestBooking = () => {
                     </tbody>
                 </table>
             </div>
-            <div className="summary">
-                <h3>Guest Details</h3>
+             <div className="summary">
+                 <h2>Guest Details</h2>
                 <input placeholder='Name' value={guest.name} onChange={e => setGuest({ ...guest, name: e.target.value })} />
                 <input placeholder='Phone' value={guest.phone} onChange={e => setGuest({ ...guest, phone: e.target.value })} />
                 <input placeholder='Email' value={guest.email} onChange={e => setGuest({ ...guest, email: e.target.value })} />

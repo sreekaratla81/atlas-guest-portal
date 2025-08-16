@@ -64,7 +64,7 @@ export default function ListingCard({ listing, prefillDates, prefillGuests }) {
       </div>
       <div className="lc-body">
         <div className="lc-header">
-          <h3 className="lc-title"><Link to={`/listings/${listing.id}`}>{listing.title}</Link></h3>
+            <h2 className="lc-title"><Link to={`/listings/${listing.id}`}>{listing.title}</Link></h2>
           <div className="lc-sub">{listing.location}</div>
           <div className="lc-price">₹{listing.pricePerNight} / night</div>
         </div>

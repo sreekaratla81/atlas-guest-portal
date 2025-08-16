@@ -24,11 +24,11 @@ export default function ListingDetails() {
       <div className="lc-media">
         <img src={listing.imageUrl} alt={listing.title} />
       </div>
-      <div className="lc-body d-flex flex-column">
-        <h3 className="lc-title">{listing.title}</h3>
-        <div className="lc-sub">{listing.location}</div>
-        <div className="lc-price">₹{listing.pricePerNight} / night</div>
-      </div>
+        <div className="lc-body d-flex flex-column">
+          <h1 className="lc-title">{listing.title}</h1>
+          <div className="lc-sub">{listing.location}</div>
+          <div className="lc-price">₹{listing.pricePerNight} / night</div>
+        </div>
       {openEnquiry && (
         <EnquiryModal
           onClose={() => setOpenEnquiry(false)}

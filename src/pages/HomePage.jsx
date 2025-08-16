@@ -15,10 +15,11 @@ export default function HomePage() {
   const others = listings.filter(l => !FEATURED_LISTING_IDS.includes(Number(l.id)));
 
   return (
-    <div className="container">
-      <StickyDateBar onSearch={handleSearch} initialDates={filters.dates} initialGuests={filters.guests} />
-      <div className="notice">Instant booking is not yet available. Submit an enquiry and we’ll confirm availability.</div>
-      <section className="grid">
+      <div className="container">
+        <StickyDateBar onSearch={handleSearch} initialDates={filters.dates} initialGuests={filters.guests} />
+        <h1>Available Listings</h1>
+        <div className="notice">Instant booking is not yet available. Submit an enquiry and we’ll confirm availability.</div>
+        <section className="grid">
         {featured.map(l => (
           <div key={`f-${l.id}`} className="card card--featured">
             <ListingCard listing={l} prefillDates={filters.dates} prefillGuests={filters.guests} />
