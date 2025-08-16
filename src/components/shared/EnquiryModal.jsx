@@ -97,10 +97,9 @@ export default function EnquiryModal({ onClose, listing, guests, preferredFrom, 
             {typeof ok === 'string' && <div>Reference: {ok}</div>}
           </div>
         ) : (
-          <>
+          <form onSubmit={submit} className="modal-form" noValidate>
             <h3>Enquire about {listing.title}</h3>
             {prefDates && <div className="muted">Preferred dates: {prefDates}</div>}
-            <form onSubmit={submit} className="modal-form" noValidate>
               <label>
                 Full name
                 <input
@@ -162,7 +161,6 @@ export default function EnquiryModal({ onClose, listing, guests, preferredFrom, 
                 </Button>
               </div>
             </form>
-          </>
         )}
       </div>
     </div>
