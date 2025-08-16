@@ -227,6 +227,8 @@ export default function EnquiryModal({ onClose, listing, guests, preferredFrom, 
             <button type="button" className="btn-ghost" onClick={onClose}>Cancel</button>
             <button className="btn-primary" disabled={submitting}>{submitting ? 'Sending…' : 'Send Enquiry'}</button>
           </div>
+        </form>
+        {ok && <div className="success">Thanks! We’ll contact you shortly.</div>}
         ) : (
           <>
             <h3>Enquire about {listing.title}</h3>

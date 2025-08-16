@@ -185,6 +185,10 @@ export default function BookingSummary() {
       </div>
 
       <form onSubmit={onProceed} className="guest-form">
+        <label>Name<input name="name" required /></label>
+        <label>Phone<input name="phone" required /></label>
+        <label>Email<input name="email" type="email" required /></label>
+        <button className="btn btn-primary" type="submit">Proceed to Pay</button>
         <label>Name<input name="name" required value={form.name} onChange={handleChange('name')} onBlur={handleBlur('name')} className={errors.name ? 'error' : touched.name && !errors.name ? 'success' : ''} />{errors.name && <span className="field-error">{errors.name}</span>}{touched.name && !errors.name && <span className="field-success">✓</span>}</label>
         <label>Phone<input name="phone" type="tel" required value={form.phone} onChange={handleChange('phone')} onBlur={handleBlur('phone')} className={errors.phone ? 'error' : touched.phone && !errors.phone ? 'success' : ''} />{errors.phone && <span className="field-error">{errors.phone}</span>}{touched.phone && !errors.phone && <span className="field-success">✓</span>}</label>
         <label>Email<input name="email" type="email" required value={form.email} onChange={handleChange('email')} onBlur={handleBlur('email')} className={errors.email ? 'error' : touched.email && !errors.email ? 'success' : ''} />{errors.email && <span className="field-error">{errors.email}</span>}{touched.email && !errors.email && <span className="field-success">✓</span>}</label>
