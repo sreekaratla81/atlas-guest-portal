@@ -148,3 +148,27 @@ body {
 .ftr__links { display:flex; gap:16px; }
 .ftr__links .icon-btn { border:none; background:transparent; color:#9ca3af; }
 .ftr__links .icon-btn:hover { color:#fff; }
+
+.extras-section {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  border: 1px solid #e5e7eb;
+  background: #f9f9f9;
+  border-radius: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.extras-section label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.extra-desc {
+  display: block;
+  font-size: 0.8rem;
+  color: #6b7280;
+}

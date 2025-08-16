@@ -6,6 +6,7 @@ const GuestBooking = () => {
     const [listings, setListings] = useState([]);
     const [selected, setSelected] = useState([]);
     const [guest, setGuest] = useState({ name: '', phone: '', email: '' });
+    const [extras, setExtras] = useState({ airportPickup: false, localTours: false });
     const [calendarDays, setCalendarDays] = useState([]);
 
     useEffect(() => {
@@ -45,6 +46,7 @@ const GuestBooking = () => {
     };
 
     const submit = async () => {
+        console.log('Extras selected:', extras);
         const guestRes = await axios.post(`${import.meta.env.VITE_API_BASE}/guests`, guest);
         const guestId = guestRes.data.id;
         const bookings = groupByListing().map(b => ({ ...b, guestId }));
@@ -53,6 +55,7 @@ const GuestBooking = () => {
         }
         alert("Booking submitted successfully");
         setSelected([]);
+        setExtras({ airportPickup: false, localTours: false });
     };
 
     return (
@@ -86,6 +89,29 @@ const GuestBooking = () => {
                 <input placeholder='Name' value={guest.name} onChange={e => setGuest({ ...guest, name: e.target.value })} />
                 <input placeholder='Phone' value={guest.phone} onChange={e => setGuest({ ...guest, phone: e.target.value })} />
                 <input placeholder='Email' value={guest.email} onChange={e => setGuest({ ...guest, email: e.target.value })} />
+
+                <div className="extras-section">
+                    <h4>Enhance Your Stay</h4>
+                    <label>
+                        <input
+                            type="checkbox"
+                            checked={extras.airportPickup}
+                            onChange={e => setExtras({ ...extras, airportPickup: e.target.checked })}
+                        />
+                        Airport Pickup - $30
+                        <span className="extra-desc"> Convenient ride from the airport.</span>
+                    </label>
+                    <label>
+                        <input
+                            type="checkbox"
+                            checked={extras.localTours}
+                            onChange={e => setExtras({ ...extras, localTours: e.target.checked })}
+                        />
+                        Local Tours - $50
+                        <span className="extra-desc"> Guided exploration of the city.</span>
+                    </label>
+                </div>
+
                 <button onClick={submit}>Book Selected</button>
             </div>
         </div>
