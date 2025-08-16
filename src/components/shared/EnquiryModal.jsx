@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { format } from 'date-fns';
 import { CONTACT, ENQUIRY_WEBHOOK } from '../../config/siteConfig';
 
@@ -9,6 +9,13 @@ export default function EnquiryModal({ onClose, listing, guests, preferredFrom, 
   });
   const [submitting, setSubmitting] = useState(false);
   const [ok, setOk] = useState(false);
+  const firstInput = useRef(null);
+  useEffect(() => {
+    firstInput.current?.focus();
+    const onKey = (e) => { if (e.key === 'Escape') onClose(); };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [onClose]);
   const prefDates = preferredFrom && preferredTo
     ? `${format(preferredFrom,'dd MMM yyyy')} → ${format(preferredTo,'dd MMM yyyy')}` : '';
 
@@ -57,7 +64,7 @@ export default function EnquiryModal({ onClose, listing, guests, preferredFrom, 
         <h3>Enquire about {listing.title}</h3>
         {prefDates && <div className="muted">Preferred dates: {prefDates}</div>}
         <form onSubmit={submit} className="modal-form">
-          <label>Full name<input required value={form.name} onChange={e=>setForm(f=>({...f, name:e.target.value}))} /></label>
+          <label>Full name<input ref={firstInput} required value={form.name} onChange={e=>setForm(f=>({...f, name:e.target.value}))} /></label>
           <label>Phone<input required value={form.phone} onChange={e=>setForm(f=>({...f, phone:e.target.value}))} /></label>
           <label>Email<input type="email" required value={form.email} onChange={e=>setForm(f=>({...f, email:e.target.value}))} /></label>
           <label>Message (optional)<textarea rows="3" value={form.message} onChange={e=>setForm(f=>({...f, message:e.target.value}))} /></label>
