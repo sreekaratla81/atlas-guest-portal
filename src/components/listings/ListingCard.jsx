@@ -18,7 +18,8 @@ export default function ListingCard({ listing, prefillDates, prefillGuests }) {
   const [range, setRange] = useState(prefillDates || { from: null, to: null });
   const [guests, setGuests] = useState(prefillGuests || 1);
   const [openEnquiry, setOpenEnquiry] = useState(false);
-  const [disabledDates, setDisabledDates] = useState([]);
+  const [showActions, setShowActions] = useState(false);
+
 
   const [coords, setCoords] = useState({ top: 0, left: 0, width: 320 });
   useEffect(() => {
@@ -107,22 +108,54 @@ export default function ListingCard({ listing, prefillDates, prefillGuests }) {
           </div>
 
           <div className="lc-actions">
-            <button className="btn-dark" onClick={() => setOpenEnquiry(true)}>
-              Enquire Now
-            </button>
-            <a className="icon-btn whatsapp" href={whatsappLink} target="_blank" rel="noreferrer" aria-label="WhatsApp">
-              <i className="fa-brands fa-whatsapp"></i>
-            </a>
-            <a className="icon-btn" href={`tel:${CONTACT.phoneE164}`} aria-label="Call">
-              <i className="fa-solid fa-phone"></i>
-            </a>
-            <a
-              className="icon-btn"
-              href={`mailto:${CONTACT.email}?subject=${encodeURIComponent('Enquiry: ' + listing.title)}`}
-              aria-label="Email"
-            >
-              <i className="fa-solid fa-envelope"></i>
-            </a>
+            {showActions ? (
+              <>
+                <button
+                  className="btn-dark"
+                  onClick={() => {
+                    setOpenEnquiry(true);
+                    setShowActions(false);
+                  }}
+                >
+                  Enquire
+                </button>
+                <a
+                  className="icon-btn whatsapp"
+                  href={whatsappLink}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="WhatsApp"
+                  onClick={() => setShowActions(false)}
+                >
+                  <i className="fa-brands fa-whatsapp"></i>
+                </a>
+                <a
+                  className="icon-btn"
+                  href={`tel:${CONTACT.phoneE164}`}
+                  aria-label="Call"
+                  onClick={() => setShowActions(false)}
+                >
+                  <i className="fa-solid fa-phone"></i>
+                </a>
+                <a
+                  className="icon-btn"
+                  href={`mailto:${CONTACT.email}?subject=${encodeURIComponent('Enquiry: ' + listing.title)}`}
+                  aria-label="Email"
+                  onClick={() => setShowActions(false)}
+                >
+                  <i className="fa-solid fa-envelope"></i>
+                </a>
+              </>
+            ) : (
+              <button
+                className="btn-dark"
+                onClick={() => setShowActions(true)}
+                aria-haspopup="true"
+                aria-expanded={showActions}
+              >
+                Book Now
+              </button>
+            )}
           </div>
         </div>
       </div>
