@@ -46,7 +46,12 @@ export default function ContactStrip({ price, whatsappLink, onEnquire }) {
           </a>
         </>
       ) : (
-        <button className="btn-dark" onClick={() => setShowOptions(true)}>
+        <button
+          className="btn-dark"
+          onClick={() => setShowOptions(true)}
+          aria-haspopup="true"
+          aria-expanded={showOptions}
+        >
           Book Now
         </button>
       )}

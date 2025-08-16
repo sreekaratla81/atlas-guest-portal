@@ -135,7 +135,12 @@ export default function ListingCard({ listing, prefillDates, prefillGuests }) {
                 </a>
               </>
             ) : (
-              <button className="btn-dark" onClick={() => setShowActions(true)}>
+              <button
+                className="btn-dark"
+                onClick={() => setShowActions(true)}
+                aria-haspopup="true"
+                aria-expanded={showActions}
+              >
                 Book Now
               </button>
             )}
