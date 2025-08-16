@@ -4,6 +4,8 @@ import { useState } from 'react';
 import { getListingById } from '../data/listings';
 import { BOOKING_WEBHOOK } from '../config/siteConfig';
 
+// Displays a summary of the booking and confirms via webhook
+
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const phoneRegex = /^\+?[1-9]\d{9,14}$/;
 

@@ -2,6 +2,8 @@ import { useState, useEffect, useRef } from 'react';
 import { format } from 'date-fns';
 import { CONTACT, ENQUIRY_WEBHOOK } from '../../config/siteConfig';
 
+// Modal for capturing guest enquiries with inline validation
+
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const phoneRegex = /^\+?[1-9]\d{9,14}$/;
 

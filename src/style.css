@@ -127,6 +127,7 @@ body {
 .modal-form input, .modal-form textarea { border:1px solid #e5e7eb; border-radius:8px; padding:8px; }
 .modal-actions { display:flex; gap:8px; justify-content:flex-end; margin-top:8px; }
 .success { margin-top:8px; color:#065f46; background:#ecfdf5; padding:8px; border-radius:8px; font-size:.9rem; }
+/* Inline validation styles */
 .field-error { color:#dc2626; font-size:.8rem; }
 .field-success { color:#065f46; font-size:.8rem; }
 .modal-form input.error, .guest-form input.error { border-color:#dc2626; color:inherit; margin-top:0; }
