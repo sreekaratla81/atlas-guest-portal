@@ -25,7 +25,7 @@ const Listings = () => {
                             <h5 className="card-title">{listing.name}</h5>
                             <p className="card-text">Sleeps {listing.maxGuests} guests</p>
                             <Link className="btn btn-primary mt-auto" to={`/listings/${listing.id}`}>View Details</Link>
-                            <button className="btn btn-danger mt-2" style={{ backgroundColor: '#FF5A5F', borderColor: '#FF5A5F' }}>Reserve</button>
+                            <button className="btn btn-danger mt-2" style={{ backgroundColor: '#D32F2F', borderColor: '#D32F2F' }}>Reserve</button>
                         </div>
                     </div>
                 </div>

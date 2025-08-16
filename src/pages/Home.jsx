@@ -135,7 +135,7 @@ const Home = () => {
             <p style={{ fontSize: '0.95rem', color: '#555' }}>{listing.desc}</p>
             <button
               className="btn btn-danger"
-              style={{ backgroundColor: '#FF5A5F', borderColor: '#FF5A5F', marginTop: 'auto' }}
+              style={{ backgroundColor: '#D32F2F', borderColor: '#D32F2F', marginTop: 'auto' }}
             >
               Reserve
             </button>
