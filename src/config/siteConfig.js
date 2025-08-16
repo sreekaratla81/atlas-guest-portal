@@ -7,3 +7,5 @@ export const CONTACT = {
 };
 
 export const ENQUIRY_WEBHOOK = import.meta.env.VITE_ENQUIRY_WEBHOOK_URL || '';
+export const BOOKING_WEBHOOK = import.meta.env.VITE_BOOKING_WEBHOOK_URL || "";
+
