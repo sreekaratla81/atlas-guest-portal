@@ -4,6 +4,8 @@ import { getListingById } from '../data/listings';
 import { CONTACT } from '../config/siteConfig';
 import EnquiryModal from '../components/shared/EnquiryModal';
 import ContactStrip from '../components/shared/ContactStrip';
+import StarRating from '../components/shared/StarRating';
+import ReviewCount from '../components/shared/ReviewCount';
 
 export default function ListingDetails() {
   const { id } = useParams();
@@ -26,8 +28,24 @@ export default function ListingDetails() {
       </div>
       <div className="lc-body d-flex flex-column">
         <h3 className="lc-title">{listing.title}</h3>
+        <div className="d-flex align-items-center">
+          <StarRating rating={listing.rating} />
+          <ReviewCount count={listing.reviewCount} />
+        </div>
         <div className="lc-sub">{listing.location}</div>
         <div className="lc-price">₹{listing.pricePerNight} / night</div>
+        <div className="host-info">
+          <img src={listing.host.photoUrl} alt={listing.host.name} />
+          <div>
+            <div className="host-name">Hosted by {listing.host.name}</div>
+            <div className="host-bio">{listing.host.bio}</div>
+          </div>
+        </div>
+        <div className="policies">
+          <div><strong>Refund:</strong> {listing.refund}</div>
+          <div><strong>House rules:</strong> {listing.houseRules}</div>
+          <a href={listing.policiesLink}>View full policies</a>
+        </div>
       </div>
       {openEnquiry && (
         <EnquiryModal
