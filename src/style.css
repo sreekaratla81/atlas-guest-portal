@@ -155,3 +155,12 @@ body {
 .ftr__links { display:flex; gap:16px; }
 .ftr__links .icon-btn { border:none; background:transparent; color:#9ca3af; }
 .ftr__links .icon-btn:hover { color:#fff; }
+.progress-bar {height:8px; background:#e5e7eb; border-radius:4px; overflow:hidden; margin:16px 0 8px;}
+.progress-bar .bar {height:100%; background:var(--color-primary); width:0; transition:width .3s;}
+.progress-steps {display:flex; justify-content:space-between; font-size:.85rem; margin-bottom:16px;}
+.progress-steps .active {color:var(--color-primary); font-weight:600;}
+.cost-breakdown div {display:flex; justify-content:space-between; margin-bottom:4px;}
+.cost-breakdown .total {font-weight:600; border-top:1px solid #e5e7eb; padding-top:4px;}
+.badges {margin-top:8px;}
+.badge {display:inline-block; background:#f3f4f6; color:#374151; padding:4px 8px; border-radius:4px; font-size:.75rem;}
+.step-nav {display:flex; gap:8px; margin-top:16px;}
