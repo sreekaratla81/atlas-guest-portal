@@ -26,6 +26,27 @@ export default function ListingCard({ listing, prefillDates, prefillGuests }) {
   const [upsellCoords, setUpsellCoords] = useState({ top: 0, left: 0, width: 260 });
   const [extras, setExtras] = useState({ airport: false, tours: false });
 
+  useEffect(() => {
+    function position() {
+      const r = upsellBtnRef.current?.getBoundingClientRect();
+      if (!r) return;
+      setUpsellCoords((c) => ({
+        ...c,
+        top: r.bottom + 6,
+        left: Math.max(8, Math.min(r.left, window.innerWidth - c.width - 20))
+      }));
+    }
+    if (openUpsell) {
+      position();
+      window.addEventListener('resize', position);
+      window.addEventListener('scroll', position, true);
+      return () => {
+        window.removeEventListener('resize', position);
+        window.removeEventListener('scroll', position, true);
+      };
+    }
+  }, [openUpsell]);
+
   const [coords, setCoords] = useState({ top: 0, left: 0, width: 320 });
   useEffect(() => {
     function position() {
@@ -66,14 +87,6 @@ export default function ListingCard({ listing, prefillDates, prefillGuests }) {
   const hasPref = range.from && range.to;
 
   function toggleUpsell() {
-    const r = upsellBtnRef.current?.getBoundingClientRect();
-    if (r) {
-      setUpsellCoords({
-        top: r.bottom + 6,
-        left: Math.max(8, Math.min(r.left, window.innerWidth - upsellCoords.width - 20)),
-        width: upsellCoords.width
-      });
-    }
     setOpenUpsell(v => !v);
   }
 
@@ -122,6 +135,8 @@ export default function ListingCard({ listing, prefillDates, prefillGuests }) {
               ref={upsellBtnRef}
               className="btn-light"
               onClick={toggleUpsell}
+              aria-haspopup="dialog"
+              aria-expanded={openUpsell}
             >
               Enhance your stay
             </button>
