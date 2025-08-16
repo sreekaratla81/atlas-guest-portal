@@ -4,20 +4,25 @@ import Home from './pages/Home';
 import GuestBooking from './pages/GuestBooking';
 import Listings from './pages/Listings';
 import ListingDetails from './pages/ListingDetails';
-import Layout from './components/Layout';
 import BookingConfirmation from './pages/BookingConfirmation';
+import Header from './components/chrome/Header';
+import Footer from './components/chrome/Footer';
 
 function App() {
     return (
-        <Routes>
-            <Route element={<Layout />}>
-                <Route path="/" element={<Home />} />
-                <Route path="/listings" element={<Listings />} />
-                <Route path="/listings/:id" element={<ListingDetails />} />
-                <Route path="/guest-booking" element={<GuestBooking />} />
-                <Route path="/booking/confirmation" element={<BookingConfirmation />} />
-            </Route>
-        </Routes>
+        <>
+            <Header />
+            <main className="container my-4">
+                <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/listings" element={<Listings />} />
+                    <Route path="/listings/:id" element={<ListingDetails />} />
+                    <Route path="/guest-booking" element={<GuestBooking />} />
+                    <Route path="/booking/confirmation" element={<BookingConfirmation />} />
+                </Routes>
+            </main>
+            <Footer />
+        </>
     );
 }
 
