@@ -1,11 +1,13 @@
-import { CONTACT } from '../../config/siteConfig';
+import React from 'react';
 
-export default function ContactStrip() {
+export default function ContactStrip({ price, whatsappLink, onEnquire }) {
   return (
     <div className="contact-strip">
-      <a href={`https://wa.me/${CONTACT.whatsappE164.replace('+','')}`} target="_blank" rel="noreferrer">WhatsApp</a>
-      <a href={`tel:${CONTACT.phoneE164}`}>Call</a>
-      <a href={`mailto:${CONTACT.email}`}>Email</a>
+      <div className="price">₹{price} / night</div>
+      <button className="btn-dark" onClick={onEnquire}>Enquire Now</button>
+      <a href={whatsappLink} target="_blank" rel="noreferrer" aria-label="WhatsApp" className="icon-btn whatsapp">
+        <i className="fa-brands fa-whatsapp"></i>
+      </a>
     </div>
   );
 }

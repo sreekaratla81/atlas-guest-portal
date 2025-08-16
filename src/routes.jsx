@@ -1,8 +1,8 @@
 import { Routes, Route } from 'react-router-dom';
 import HomePage from './pages/HomePage';
-import ContactStrip from './components/shared/ContactStrip';
 import Header from './components/chrome/Header';
 import Footer from './components/chrome/Footer';
+import ListingDetails from './pages/ListingDetails';
 
 export default function AppRoutes() {
   return (
@@ -10,9 +10,9 @@ export default function AppRoutes() {
       <Header />
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/listings/:id" element={<ListingDetails />} />
       </Routes>
       <Footer />
-      {typeof window !== 'undefined' && window.innerWidth < 768 && <ContactStrip />}
     </>
   );
 }
