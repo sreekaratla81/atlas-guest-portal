@@ -52,18 +52,23 @@ export default function ListingCard({ listing, prefillDates, prefillGuests }) {
         </div>
 
         <div className="lc-controls">
-          <button className="lc-chip" aria-label="Open preferred dates calendar" onClick={() => setOpenCal(v => !v)}>
-            📅 {hasPref ? preferredLabel : 'Preferred dates'}
-          </button>
-
-          {openCal && (
-            <div className="lc-popover">
-              <DayPicker mode="range" selected={range} onSelect={setRange} />
-            </div>
-          )}
+          <div className="lc-date">
+            <button className="lc-chip" aria-label="Open preferred dates calendar" onClick={() => setOpenCal(v => !v)}>
+              📅 {hasPref ? preferredLabel : 'Preferred dates'}
+            </button>
+            {openCal && (
+              <div className="lc-popover">
+                <DayPicker mode="range" selected={range} onSelect={setRange} />
+              </div>
+            )}
+          </div>
 
           <select className="lc-select" value={guests} onChange={e => setGuests(Number(e.target.value))}>
-            {[...Array(6)].map((_,i) => <option key={i+1} value={i+1}>{i+1} Guest{i? 's':''}</option>)}
+            {[...Array(6)].map((_, i) => (
+              <option key={i + 1} value={i + 1}>
+                {i + 1} Guest{i ? 's' : ''}
+              </option>
+            ))}
           </select>
 
           <div className={`lc-pill ${hasPref ? 'ok' : 'muted'}`}>
@@ -74,11 +79,15 @@ export default function ListingCard({ listing, prefillDates, prefillGuests }) {
             <button className="btn-primary" onClick={() => { setOpenEnquiry(true); window.gtag?.('event','enquiry_open',{listingId: listing.id}); }}>
               Enquire Now
             </button>
-            <div className="btn-split">
-              <a className="btn-ghost" href={whatsappLink} target="_blank" rel="noreferrer">WhatsApp</a>
-              <a className="btn-ghost" href={telLink}>Call</a>
-              <a className="btn-ghost" href={mailtoLink}>Email</a>
-            </div>
+            <a className="btn-ghost" href={whatsappLink} target="_blank" rel="noreferrer">
+              WhatsApp
+            </a>
+            <a className="btn-ghost" href={telLink}>
+              Call
+            </a>
+            <a className="btn-ghost" href={mailtoLink}>
+              Email
+            </a>
           </div>
         </div>
       </div>
