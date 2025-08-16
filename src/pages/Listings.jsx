@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { API_BASE } from '../config';
+import { API_BASE_URL } from '../config';
 
 const Listings = () => {
     const [listings, setListings] = useState([]);
 
     useEffect(() => {
-        axios.get(`${API_BASE}/listings`).then(res => setListings(res.data));
+        axios.get(`${API_BASE_URL}/listings`).then(res => setListings(res.data));
     }, []);
 
     const handleImageError = (e) => {

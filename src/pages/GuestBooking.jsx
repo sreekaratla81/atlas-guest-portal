@@ -1,6 +1,7 @@
 // src/pages/GuestBooking.jsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { API_BASE_URL } from '../config';
 import { DayPicker } from 'react-day-picker';
 import { format, parseISO } from 'date-fns';
 import { enUS } from 'date-fns/locale';
@@ -14,7 +15,7 @@ const GuestBooking = () => {
 
     useEffect(() => {
         axios
-            .get(`${import.meta.env.VITE_API_BASE}/listings`)
+            .get(`${API_BASE_URL}/listings`)
             .then(res => setListings(res.data));
 
         const userLocale = navigator.language;
@@ -46,11 +47,11 @@ const GuestBooking = () => {
     };
 
     const submit = async () => {
-        const guestRes = await axios.post(`${import.meta.env.VITE_API_BASE}/guests`, guest);
+        const guestRes = await axios.post(`${API_BASE_URL}/guests`, guest);
         const guestId = guestRes.data.id;
         const bookings = groupByListing().map(b => ({ ...b, guestId }));
         for (let b of bookings) {
-            await axios.post(`${import.meta.env.VITE_API_BASE}/bookings`, b);
+            await axios.post(`${API_BASE_URL}/bookings`, b);
         }
         alert("Booking submitted successfully");
         setSelected([]);

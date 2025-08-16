@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { API_BASE } from '../config';
+import { API_BASE_URL } from '../config';
 import { CONTACT } from '../config/siteConfig';
 import EnquiryModal from '../components/shared/EnquiryModal';
 import ContactStrip from '../components/shared/ContactStrip';
@@ -15,7 +15,7 @@ export default function ListingDetails() {
   const { formatCurrency } = useCurrency();
 
   useEffect(() => {
-    axios.get(`${API_BASE}/listings/${id}`).then(res => {
+    axios.get(`${API_BASE_URL}/listings/${id}`).then(res => {
       setListing(res.data);
     });
   }, [id]);
