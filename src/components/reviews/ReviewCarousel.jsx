@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { reviews } from '../../data/reviews';
 
 export default function ReviewCarousel() {
@@ -8,10 +8,15 @@ export default function ReviewCarousel() {
   const review = reviews[index];
   const stars = '★'.repeat(review.rating) + '☆'.repeat(5 - review.rating);
 
+  useEffect(() => {
+    const timer = setInterval(next, 5000);
+    return () => clearInterval(timer);
+  }, [index]);
+
   return (
-    <section className="rc-wrap">
+    <section className="rc-wrap" role="region" aria-label="Guest Reviews">
       <h2 className="rc-title">Guest Reviews</h2>
-      <div className="rc-card">
+      <div className="rc-card" aria-live="polite">
         <div className="rc-stars" aria-label={`${review.rating} star review`}>{stars}</div>
         <p className="rc-text">"{review.text}"</p>
         <div className="rc-meta">
