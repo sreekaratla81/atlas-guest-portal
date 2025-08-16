@@ -36,7 +36,7 @@ const Listings = () => {
                                 <p className="card-text">Rating: {listing.rating}</p>
                             ) : null}
                             <Link className="btn btn-primary mt-auto" to={`/listings/${listing.id}`}>View Details</Link>
-                            <button className="btn btn-danger mt-2" style={{ backgroundColor: '#FF5A5F', borderColor: '#FF5A5F' }}>Reserve</button>
+                            <button className="btn btn-danger mt-2" style={{ backgroundColor: '#D32F2F', borderColor: '#D32F2F' }}>Reserve</button>
                         </div>
                     </div>
                 </div>
