@@ -6,6 +6,7 @@ import { DayPicker } from 'react-day-picker';
 import { format } from 'date-fns';
 import EnquiryModal from '../shared/EnquiryModal';
 import { CONTACT } from '../../config/siteConfig';
+import { fetchAvailability } from '../../services/availability';
 
 export default function ListingCard({ listing, prefillDates, prefillGuests }) {
   const [openCal, setOpenCal] = useState(false);
@@ -17,6 +18,7 @@ export default function ListingCard({ listing, prefillDates, prefillGuests }) {
   const [range, setRange] = useState(prefillDates || { from: null, to: null });
   const [guests, setGuests] = useState(prefillGuests || 1);
   const [openEnquiry, setOpenEnquiry] = useState(false);
+  const [showActions, setShowActions] = useState(false);
 
   const [openUpsell, setOpenUpsell] = useState(false);
   const upsellBtnRef = useRef(null);
@@ -26,26 +28,7 @@ export default function ListingCard({ listing, prefillDates, prefillGuests }) {
   const [upsellCoords, setUpsellCoords] = useState({ top: 0, left: 0, width: 260 });
   const [extras, setExtras] = useState({ airport: false, tours: false });
 
-  useEffect(() => {
-    function position() {
-      const r = upsellBtnRef.current?.getBoundingClientRect();
-      if (!r) return;
-      setUpsellCoords((c) => ({
-        ...c,
-        top: r.bottom + 6,
-        left: Math.max(8, Math.min(r.left, window.innerWidth - c.width - 20))
-      }));
-    }
-    if (openUpsell) {
-      position();
-      window.addEventListener('resize', position);
-      window.addEventListener('scroll', position, true);
-      return () => {
-        window.removeEventListener('resize', position);
-        window.removeEventListener('scroll', position, true);
-      };
-    }
-  }, [openUpsell]);
+  const [disabledDates, setDisabledDates] = useState([]);
 
   const [coords, setCoords] = useState({ top: 0, left: 0, width: 320 });
   useEffect(() => {
@@ -69,6 +52,35 @@ export default function ListingCard({ listing, prefillDates, prefillGuests }) {
     }
   }, [openCal]);
 
+  useEffect(() => {
+    function position() {
+      const r = upsellBtnRef.current?.getBoundingClientRect();
+      if (!r) return;
+      setUpsellCoords(c => ({
+        ...c,
+        top: r.bottom + 6,
+        left: Math.max(8, Math.min(r.left, window.innerWidth - c.width - 20))
+      }));
+    }
+    if (openUpsell) {
+      position();
+      window.addEventListener('resize', position);
+      window.addEventListener('scroll', position, true);
+      return () => {
+        window.removeEventListener('resize', position);
+        window.removeEventListener('scroll', position, true);
+      };
+    }
+  }, [openUpsell]);
+
+  useEffect(() => {
+    if (openCal && !disabledDates.length) {
+      fetchAvailability(listing.id)
+        .then(d => setDisabledDates(d.map(dt => new Date(dt))))
+        .catch(() => {});
+    }
+  }, [openCal, listing.id, disabledDates.length]);
+
   const preferredLabel = range.from && range.to
     ? `${format(range.from,'dd MMM')} → ${format(range.to,'dd MMM')}`
     : '';
@@ -85,6 +97,8 @@ export default function ListingCard({ listing, prefillDates, prefillGuests }) {
 
 
   const hasPref = range.from && range.to;
+  const guideText = !range.from ? 'Select check-in date' : !range.to ? 'Select check-out date' : '';
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
 
   function toggleUpsell() {
     setOpenUpsell(v => !v);
@@ -128,40 +142,118 @@ export default function ListingCard({ listing, prefillDates, prefillGuests }) {
           </div>
 
           <div className="lc-actions">
-            <button className="btn-dark" onClick={() => setOpenEnquiry(true)}>
-              Enquire Now
-            </button>
-            <button
-              ref={upsellBtnRef}
-              className="btn-light"
-              onClick={toggleUpsell}
-              aria-haspopup="dialog"
-              aria-expanded={openUpsell}
-            >
-              Enhance your stay
-            </button>
-            <a className="icon-btn whatsapp" href={whatsappLink} target="_blank" rel="noreferrer" aria-label="WhatsApp">
-              <i className="fa-brands fa-whatsapp"></i>
-            </a>
-            <a className="icon-btn" href={`tel:${CONTACT.phoneE164}`} aria-label="Call">
-              <i className="fa-solid fa-phone"></i>
-            </a>
-            <a
-              className="icon-btn"
-              href={`mailto:${CONTACT.email}?subject=${encodeURIComponent('Enquiry: ' + listing.title)}`}
-              aria-label="Email"
-            >
-              <i className="fa-solid fa-envelope"></i>
-            </a>
+            {showActions ? (
+              <>
+                <button
+                  className="btn-dark"
+                  onClick={() => {
+                    setOpenEnquiry(true);
+                    setShowActions(false);
+                  }}
+                >
+                  Enquire
+                </button>
+                <button
+                  ref={upsellBtnRef}
+                  className="btn-light"
+                  onClick={toggleUpsell}
+                  aria-haspopup="dialog"
+                  aria-expanded={openUpsell}
+                >
+                  Enhance your stay
+                </button>
+                <a
+                  className="icon-btn whatsapp"
+                  href={whatsappLink}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="WhatsApp"
+                  onClick={() => setShowActions(false)}
+                >
+                  <i className="fa-brands fa-whatsapp"></i>
+                </a>
+                <a
+                  className="icon-btn"
+                  href={`tel:${CONTACT.phoneE164}`}
+                  aria-label="Call"
+                  onClick={() => setShowActions(false)}
+                >
+                  <i className="fa-solid fa-phone"></i>
+                </a>
+                <a
+                  className="icon-btn"
+                  href={`mailto:${CONTACT.email}?subject=${encodeURIComponent('Enquiry: ' + listing.title)}`}
+                  aria-label="Email"
+                  onClick={() => setShowActions(false)}
+                >
+                  <i className="fa-solid fa-envelope"></i>
+                </a>
+              </>
+            ) : (
+              <button
+                className="btn-dark"
+                onClick={() => setShowActions(true)}
+                aria-haspopup="true"
+                aria-expanded={showActions}
+              >
+                Book Now
+              </button>
+            )}
           </div>
         </div>
       </div>
 
       {openCal && (
         <PopoverPortal>
-          <div ref={popRef} className="popover" style={{ top: coords.top, left: coords.left, width: coords.width }}>
-            <DayPicker mode="range" selected={range} onSelect={setRange} />
-          </div>
+          {isMobile ? (
+            <div className="cal-backdrop" onClick={() => setOpenCal(false)}>
+              <div
+                ref={popRef}
+                className="cal-sheet"
+                onClick={e => e.stopPropagation()}
+              >
+                <div className="dp-header">
+                  <div className="dp-guide">{guideText}</div>
+                  <button
+                    className="dp-clear"
+                    onClick={() => setRange({ from: null, to: null })}
+                    disabled={!range.from && !range.to}
+                  >
+                    Clear dates
+                  </button>
+                </div>
+                <DayPicker
+                  mode="range"
+                  selected={range}
+                  onSelect={setRange}
+                  disabled={disabledDates}
+                />
+              </div>
+            </div>
+          ) : (
+            <div
+              ref={popRef}
+              className="popover"
+              style={{ top: coords.top, left: coords.left, width: coords.width }}
+            >
+              <div className="dp-header">
+                <div className="dp-guide">{guideText}</div>
+                <button
+                  className="dp-clear"
+                  onClick={() => setRange({ from: null, to: null })}
+                  disabled={!range.from && !range.to}
+                >
+                  Clear dates
+                </button>
+              </div>
+              <DayPicker
+                mode="range"
+                selected={range}
+                onSelect={setRange}
+                disabled={disabledDates}
+              />
+            </div>
+          )}
         </PopoverPortal>
       )}
 
