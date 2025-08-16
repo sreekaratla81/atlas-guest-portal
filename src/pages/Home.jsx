@@ -62,7 +62,7 @@ const Home = () => {
       <section className="text-center py-5" style={heroStyle}>
         <h1 className="display-4 mb-3">Welcome to Atlas Homestays</h1>
         <p className="lead mb-4">Premium Service Apartments in KPHB.</p>
-        <Link to="/listings" className="btn-primary">
+        <Link to="/listings" className="btn btn-primary">
           Browse Listings
         </Link>
       </section>
@@ -99,7 +99,7 @@ const Home = () => {
             {[0, 1, 2, 3, 4, 5].map(n => <option key={n} value={n}>{n} Child{n !== 1 ? 'ren' : ''}</option>)}
           </select>
         </div>
-        <button onClick={handleCheck} className="btn-primary">
+        <button onClick={handleCheck} className="btn btn-primary">
           Check Availability
         </button>
       </div>
@@ -122,7 +122,7 @@ const Home = () => {
             />
             <h2 style={{ fontSize: '1.25rem', margin: '0.75rem 0 0.5rem' }}>{listing.title}</h2>
             <p style={{ fontSize: '0.95rem', color: '#555' }}>{listing.desc}</p>
-            <button className="btn-primary" style={{ marginTop: 'auto' }}>
+            <button className="btn btn-primary" style={{ marginTop: 'auto' }}>
               Reserve
             </button>
           </div>

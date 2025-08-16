@@ -56,10 +56,11 @@ body {
 .lc-pill.ok { background:#d1fae5; color:#065f46; }
 
 .lc-actions { display:flex; flex-wrap:wrap; gap:8px; justify-content:flex-end; margin-top:8px; }
-.btn-primary { height:36px; padding:0 14px; border-radius:8px; border:none; background:var(--color-primary); color:#fff; font-weight:600; cursor:pointer; transition:background .2s; }
+.btn { height:36px; padding:0 14px; border-radius:8px; border:none; font-weight:600; cursor:pointer; transition:background .2s; }
+.btn:disabled { opacity:.5; cursor:not-allowed; }
+.btn-primary { background:var(--color-primary); color:#fff; }
 .btn-primary:hover { background:#4338CA; }
 .btn-primary:focus-visible { outline:2px solid #4F46E544; outline-offset:2px; }
-.btn-primary:disabled { opacity:.5; cursor:not-allowed; }
 .btn-dark { height:36px; padding:0 14px; border-radius:8px; border:none; background:#111827; color:#fff; font-weight:600; }
 .btn-dark:focus-visible { outline:2px solid #11182744; outline-offset:2px; }
 .btn-dark:disabled { opacity:.5; cursor:not-allowed; }
