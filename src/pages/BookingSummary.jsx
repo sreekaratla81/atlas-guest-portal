@@ -51,7 +51,7 @@ export default function BookingSummary() {
         <label>Name<input name="name" required /></label>
         <label>Phone<input name="phone" required /></label>
         <label>Email<input name="email" type="email" required /></label>
-        <button className="primary" type="submit">Proceed to Pay</button>
+        <button className="btn-primary" type="submit">Proceed to Pay</button>
       </form>
     </div>
   );

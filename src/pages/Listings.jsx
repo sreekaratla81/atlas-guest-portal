@@ -24,8 +24,8 @@ const Listings = () => {
                         <div className="card-body d-flex flex-column">
                             <h5 className="card-title">{listing.name}</h5>
                             <p className="card-text">Sleeps {listing.maxGuests} guests</p>
-                            <Link className="btn btn-primary mt-auto" to={`/listings/${listing.id}`}>View Details</Link>
-                            <button className="btn btn-danger mt-2" style={{ backgroundColor: '#FF5A5F', borderColor: '#FF5A5F' }}>Reserve</button>
+                            <Link className="btn-primary mt-auto" to={`/listings/${listing.id}`}>View Details</Link>
+                            <button className="btn-primary mt-2">Reserve</button>
                         </div>
                     </div>
                 </div>
