@@ -70,6 +70,13 @@ body {
 
 .popover { position:fixed; z-index:1000; background:#fff; border:1px solid #e5e7eb; border-radius:10px; padding:8px; box-shadow:0 10px 20px rgba(0,0,0,.08); }
 
+.cal-backdrop { position:fixed; inset:0; background:rgba(0,0,0,.35); display:flex; align-items:flex-end; justify-content:center; z-index:1000; }
+.cal-sheet { width:100%; background:#fff; border-radius:12px 12px 0 0; padding:16px; box-shadow:0 -2px 10px rgba(0,0,0,.2); }
+.dp-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+.dp-guide { font-size:.9rem; }
+.dp-clear { border:none; background:none; color:var(--color-primary); font-size:.85rem; text-decoration:underline; cursor:pointer; }
+.dp-clear:disabled { opacity:.5; text-decoration:none; cursor:default; }
+
 /* Banner at top */
 .notice { padding:8px 12px; background:#F9FAFB; border:1px solid #EEE; border-radius:8px; margin:8px 0; font-size:14px; }
 
