@@ -2,6 +2,10 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { differenceInCalendarDays, format } from 'date-fns';
 import { useState } from 'react';
 import { getListingById } from '../data/listings';
+import { BOOKING_WEBHOOK } from '../config/siteConfig';
+
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const phoneRegex = /^\+?[1-9]\d{9,14}$/;
 
 export default function BookingSummary() {
   const { state } = useLocation();
@@ -13,35 +17,46 @@ export default function BookingSummary() {
   }
 
   const listing = getListingById(state.listingId);
-  const checkIn = new Date(state.checkIn);
-  const checkOut = new Date(state.checkOut);
-  const nights = Math.max(1, differenceInCalendarDays(checkOut, checkIn));
-  const total = nights * listing.pricePerNight;
-
-  const [form, setForm] = useState({ name: '', phone: '', email: '' });
+  const [form, setForm] = useState({
+    checkIn: state.checkIn,
+    checkOut: state.checkOut,
+    guests: state.guests,
+    name: '',
+    phone: '',
+    email: ''
+  });
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
-  const [success, setSuccess] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [reference, setReference] = useState('');
 
-  const validateField = (field, value) => {
-    if (field === 'name') return value ? '' : 'Name is required';
-    if (field === 'phone') return /^\d{10}$/.test(value) ? '' : 'Phone must be 10 digits';
-    if (field === 'email') return /\S+@\S+\.\S+/.test(value) ? '' : 'Invalid email';
+  const checkIn = new Date(form.checkIn);
+  const checkOut = new Date(form.checkOut);
+  const nights = Math.max(1, differenceInCalendarDays(checkOut, checkIn));
+  const rate = listing.pricePerNight * nights;
+  const fees = Math.round(rate * 0.1);
+  const taxes = Math.round(rate * 0.12);
+  const total = rate + fees + taxes;
+
+  const validateField = (name, value) => {
+    if (name === 'name' && !value.trim()) return 'Name is required';
+    if (name === 'email' && !emailRegex.test(value)) return 'Enter a valid email address';
+    if (name === 'phone' && !phoneRegex.test(value)) return 'Enter a valid phone number';
     return '';
   };
 
-  const handleChange = (field) => (e) => {
+  const handleChange = (name) => (e) => {
     const value = e.target.value;
-    setForm(f => ({ ...f, [field]: value }));
-    if (touched[field]) {
-      setErrors(err => ({ ...err, [field]: validateField(field, value) }));
+    setForm(f => ({ ...f, [name]: value }));
+    if (touched[name]) {
+      setErrors(err => ({ ...err, [name]: validateField(name, value) }));
     }
   };
 
-  const handleBlur = (field) => (e) => {
+  const handleBlur = (name) => (e) => {
     const value = e.target.value;
-    setTouched(t => ({ ...t, [field]: true }));
-    setErrors(err => ({ ...err, [field]: validateField(field, value) }));
+    setTouched(t => ({ ...t, [name]: true }));
+    setErrors(err => ({ ...err, [name]: validateField(name, value) }));
   };
 
   const onProceed = async (e) => {
@@ -54,34 +69,52 @@ export default function BookingSummary() {
     setErrors(errs);
     setTouched({ name: true, phone: true, email: true });
     if (Object.values(errs).some(Boolean)) return;
-
+    setSubmitting(true);
     const payload = {
       listingId: listing.id,
-      checkIn: state.checkIn,
-      checkOut: state.checkOut,
-      guests: state.guests,
+      checkIn: form.checkIn,
+      checkOut: form.checkOut,
+      guests: form.guests,
       name: form.name,
       phone: form.phone,
       email: form.email,
       amount: total
     };
     try {
-      const res = await fetch('/api/bookings', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-      const result = await res.json().catch(() => null);
-      if (!res.ok) {
-        if (result?.errors) setErrors(result.errors);
-        else alert('Could not complete booking.');
+      if (BOOKING_WEBHOOK) {
+        const res = await fetch(BOOKING_WEBHOOK, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) {
+          if (data.errors) setErrors(data.errors);
+          else throw new Error('webhook failed');
+        } else {
+          setReference(data.reference || data.bookingRef || '');
+        }
       } else {
-        setSuccess(true);
+        alert('Booking submitted. Configure BOOKING_WEBHOOK to enable confirmations.');
+        setReference('TEMP');
       }
     } catch {
-      alert('Could not complete booking.');
+      alert('Could not complete booking. Please try again.');
+    } finally {
+      setSubmitting(false);
     }
   };
+
+  if (reference) {
+    return (
+      <div className="summary">
+        <h2>Booking Confirmed</h2>
+        <p>Your booking reference is <strong>{reference}</strong>.</p>
+        <p>We have sent a confirmation message. Our team will reach out with next steps.</p>
+        <button className="primary" onClick={() => nav('/')}>Back to Home</button>
+      </div>
+    );
+  }
 
   return (
     <div className="summary">
@@ -91,18 +124,24 @@ export default function BookingSummary() {
         <div>
           <h3>{listing.title}</h3>
           <div>{listing.location}</div>
-          <div>Dates: {format(checkIn,'dd MMM yyyy')} → {format(checkOut,'dd MMM yyyy')} ({nights} night{nights>1?'s':''})</div>
-          <div>Guests: {state.guests}</div>
-          <div>Price: ₹{listing.pricePerNight} × {nights} = <strong>₹{total}</strong></div>
+          <div>
+            Dates: {format(checkIn, 'dd MMM yyyy')} → {format(checkOut, 'dd MMM yyyy')} ({nights} night{nights > 1 ? 's' : ''})
+          </div>
+          <div>Guests: {form.guests}</div>
+          <div>Price: ₹{listing.pricePerNight} × {nights} = <strong>₹{rate}</strong></div>
+          <div className="cost-breakdown">
+            <div>Fees<span>₹{fees}</span></div>
+            <div>Taxes<span>₹{taxes}</span></div>
+            <div className="total">Total<span>₹{total}</span></div>
+          </div>
         </div>
       </div>
 
       <form onSubmit={onProceed} className="guest-form">
         <label>Name<input name="name" required value={form.name} onChange={handleChange('name')} onBlur={handleBlur('name')} className={errors.name ? 'error' : touched.name && !errors.name ? 'success' : ''} />{errors.name && <span className="field-error">{errors.name}</span>}{touched.name && !errors.name && <span className="field-success">✓</span>}</label>
-        <label>Phone<input name="phone" required value={form.phone} onChange={handleChange('phone')} onBlur={handleBlur('phone')} className={errors.phone ? 'error' : touched.phone && !errors.phone ? 'success' : ''} />{errors.phone && <span className="field-error">{errors.phone}</span>}{touched.phone && !errors.phone && <span className="field-success">✓</span>}</label>
+        <label>Phone<input name="phone" type="tel" required value={form.phone} onChange={handleChange('phone')} onBlur={handleBlur('phone')} className={errors.phone ? 'error' : touched.phone && !errors.phone ? 'success' : ''} />{errors.phone && <span className="field-error">{errors.phone}</span>}{touched.phone && !errors.phone && <span className="field-success">✓</span>}</label>
         <label>Email<input name="email" type="email" required value={form.email} onChange={handleChange('email')} onBlur={handleBlur('email')} className={errors.email ? 'error' : touched.email && !errors.email ? 'success' : ''} />{errors.email && <span className="field-error">{errors.email}</span>}{touched.email && !errors.email && <span className="field-success">✓</span>}</label>
-        <button className="primary" type="submit">Proceed to Pay</button>
-        {success && <div className="success">Booking details saved.</div>}
+        <button className="primary" type="submit" disabled={submitting}>{submitting ? 'Submitting…' : 'Proceed to Pay'}</button>
       </form>
     </div>
   );

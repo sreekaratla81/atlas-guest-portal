@@ -2,14 +2,17 @@ import { useState, useEffect, useRef } from 'react';
 import { format } from 'date-fns';
 import { CONTACT, ENQUIRY_WEBHOOK } from '../../config/siteConfig';
 
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const phoneRegex = /^\+?[1-9]\d{9,14}$/;
+
 export default function EnquiryModal({ onClose, listing, guests, preferredFrom, preferredTo }) {
   const [form, setForm] = useState({
     name: '', phone: '', email: '',
     message: ''
   });
+  const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
   const [ok, setOk] = useState(false);
-  const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
   const firstInput = useRef(null);
   useEffect(() => {
@@ -21,25 +24,25 @@ export default function EnquiryModal({ onClose, listing, guests, preferredFrom, 
   const prefDates = preferredFrom && preferredTo
     ? `${format(preferredFrom,'dd MMM yyyy')} → ${format(preferredTo,'dd MMM yyyy')}` : '';
 
-  const validateField = (field, value) => {
-    if (field === 'name') return value ? '' : 'Name is required';
-    if (field === 'phone') return /^\d{10}$/.test(value) ? '' : 'Phone must be 10 digits';
-    if (field === 'email') return /\S+@\S+\.\S+/.test(value) ? '' : 'Invalid email';
+  const validateField = (name, value) => {
+    if (name === 'name' && !value.trim()) return 'Name is required';
+    if (name === 'email' && !emailRegex.test(value)) return 'Enter a valid email address';
+    if (name === 'phone' && !phoneRegex.test(value)) return 'Enter a valid phone number';
     return '';
   };
 
-  const handleChange = (field) => (e) => {
+  const handleChange = (name) => (e) => {
     const value = e.target.value;
-    setForm(f => ({ ...f, [field]: value }));
-    if (touched[field]) {
-      setErrors(err => ({ ...err, [field]: validateField(field, value) }));
+    setForm(f => ({ ...f, [name]: value }));
+    if (touched[name]) {
+      setErrors(err => ({ ...err, [name]: validateField(name, value) }));
     }
   };
 
-  const handleBlur = (field) => (e) => {
+  const handleBlur = (name) => (e) => {
     const value = e.target.value;
-    setTouched(t => ({ ...t, [field]: true }));
-    setErrors(err => ({ ...err, [field]: validateField(field, value) }));
+    setTouched(t => ({ ...t, [name]: true }));
+    setErrors(err => ({ ...err, [name]: validateField(name, value) }));
   };
 
   const submit = async (e) => {
@@ -52,7 +55,6 @@ export default function EnquiryModal({ onClose, listing, guests, preferredFrom, 
     setErrors(errs);
     setTouched({ name: true, phone: true, email: true });
     if (Object.values(errs).some(Boolean)) return;
-
     setSubmitting(true);
     const payload = {
       listingId: listing.id,
@@ -69,12 +71,12 @@ export default function EnquiryModal({ onClose, listing, guests, preferredFrom, 
           headers: { 'Content-Type':'application/json' },
           body: JSON.stringify(payload)
         });
-        const result = await res.json().catch(() => null);
+        const result = await res.json().catch(() => ({}));
         if (!res.ok) {
-          if (result?.errors) setErrors(result.errors);
+          if (result.errors) setErrors(result.errors);
           else throw new Error('webhook failed');
         } else {
-          setOk(true);
+          setOk(result.reference || true);
         }
       } else {
         const subject = encodeURIComponent(`Enquiry: ${listing.title}`);
@@ -98,22 +100,30 @@ export default function EnquiryModal({ onClose, listing, guests, preferredFrom, 
   return (
     <div className="modal-backdrop" onClick={onClose}>
       <div className="modal" onClick={e => e.stopPropagation()}>
-        <h3>Enquire about {listing.title}</h3>
-        {prefDates && <div className="muted">Preferred dates: {prefDates}</div>}
-        <form onSubmit={submit} className="modal-form">
-          <label>Full name<input ref={firstInput} required value={form.name} onChange={handleChange('name')} onBlur={handleBlur('name')} className={errors.name ? 'error' : touched.name && !errors.name ? 'success' : ''} />{errors.name && <span className="field-error">{errors.name}</span>}{touched.name && !errors.name && <span className="field-success">✓</span>}</label>
-          <label>Phone<input required value={form.phone} onChange={handleChange('phone')} onBlur={handleBlur('phone')} className={errors.phone ? 'error' : touched.phone && !errors.phone ? 'success' : ''} />{errors.phone && <span className="field-error">{errors.phone}</span>}{touched.phone && !errors.phone && <span className="field-success">✓</span>}</label>
-          <label>Email<input type="email" required value={form.email} onChange={handleChange('email')} onBlur={handleBlur('email')} className={errors.email ? 'error' : touched.email && !errors.email ? 'success' : ''} />{errors.email && <span className="field-error">{errors.email}</span>}{touched.email && !errors.email && <span className="field-success">✓</span>}</label>
-          <label>Message (optional)<textarea rows="3" value={form.message} onChange={e=>setForm(f=>({...f, message:e.target.value}))} /></label>
-
-          <div className="notice-text">We’ll confirm availability and price over WhatsApp/phone. Online booking is coming soon.</div>
-
-          <div className="modal-actions">
-            <button type="button" className="btn-ghost" onClick={onClose}>Cancel</button>
-            <button className="btn-primary" disabled={submitting}>{submitting ? 'Sending…' : 'Send Enquiry'}</button>
+        {ok ? (
+          <div className="success">
+            <h3>Thanks! We’ll contact you shortly.</h3>
+            {typeof ok === 'string' && <div>Reference: {ok}</div>}
           </div>
-          {ok && <div className="success">Thanks! We’ll contact you shortly.</div>}
-        </form>
+        ) : (
+          <>
+            <h3>Enquire about {listing.title}</h3>
+            {prefDates && <div className="muted">Preferred dates: {prefDates}</div>}
+            <form onSubmit={submit} className="modal-form">
+              <label>Full name<input ref={firstInput} required value={form.name} onChange={handleChange('name')} onBlur={handleBlur('name')} className={errors.name ? 'error' : touched.name && !errors.name ? 'success' : ''} />{errors.name && <span className="field-error">{errors.name}</span>}{touched.name && !errors.name && <span className="field-success">✓</span>}</label>
+              <label>Phone<input type="tel" required value={form.phone} onChange={handleChange('phone')} onBlur={handleBlur('phone')} className={errors.phone ? 'error' : touched.phone && !errors.phone ? 'success' : ''} />{errors.phone && <span className="field-error">{errors.phone}</span>}{touched.phone && !errors.phone && <span className="field-success">✓</span>}</label>
+              <label>Email<input type="email" required value={form.email} onChange={handleChange('email')} onBlur={handleBlur('email')} className={errors.email ? 'error' : touched.email && !errors.email ? 'success' : ''} />{errors.email && <span className="field-error">{errors.email}</span>}{touched.email && !errors.email && <span className="field-success">✓</span>}</label>
+              <label>Message (optional)<textarea rows="3" value={form.message} onChange={e=>setForm(f=>({...f, message:e.target.value}))} /></label>
+
+              <div className="notice-text">We’ll confirm availability and price over WhatsApp/phone. Online booking is coming soon.</div>
+
+              <div className="modal-actions">
+                <button type="button" className="btn-ghost" onClick={onClose}>Cancel</button>
+                <button className="btn-primary" disabled={submitting}>{submitting ? 'Sending…' : 'Send Enquiry'}</button>
+              </div>
+            </form>
+          </>
+        )}
       </div>
     </div>
   );
