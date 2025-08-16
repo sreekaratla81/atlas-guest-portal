@@ -6,6 +6,7 @@ import { DayPicker } from 'react-day-picker';
 import { format } from 'date-fns';
 import EnquiryModal from '../shared/EnquiryModal';
 import { CONTACT } from '../../config/siteConfig';
+import { fetchAvailability } from '../../services/availability';
 
 export default function ListingCard({ listing, prefillDates, prefillGuests }) {
   const [openCal, setOpenCal] = useState(false);
@@ -18,6 +19,7 @@ export default function ListingCard({ listing, prefillDates, prefillGuests }) {
   const [guests, setGuests] = useState(prefillGuests || 1);
   const [openEnquiry, setOpenEnquiry] = useState(false);
   const [showActions, setShowActions] = useState(false);
+
 
   const [coords, setCoords] = useState({ top: 0, left: 0, width: 320 });
   useEffect(() => {
@@ -41,6 +43,14 @@ export default function ListingCard({ listing, prefillDates, prefillGuests }) {
     }
   }, [openCal]);
 
+  useEffect(() => {
+    if (openCal && !disabledDates.length) {
+      fetchAvailability(listing.id)
+        .then(d => setDisabledDates(d.map(dt => new Date(dt))))
+        .catch(() => {});
+    }
+  }, [openCal, listing.id, disabledDates.length]);
+
   const preferredLabel = range.from && range.to
     ? `${format(range.from,'dd MMM')} → ${format(range.to,'dd MMM')}`
     : '';
@@ -57,6 +67,8 @@ export default function ListingCard({ listing, prefillDates, prefillGuests }) {
 
 
   const hasPref = range.from && range.to;
+  const guideText = !range.from ? 'Select check-in date' : !range.to ? 'Select check-out date' : '';
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
 
   return (
     <div className="lc-card">
@@ -150,9 +162,55 @@ export default function ListingCard({ listing, prefillDates, prefillGuests }) {
 
       {openCal && (
         <PopoverPortal>
-          <div ref={popRef} className="popover" style={{ top: coords.top, left: coords.left, width: coords.width }}>
-            <DayPicker mode="range" selected={range} onSelect={setRange} />
-          </div>
+          {isMobile ? (
+            <div className="cal-backdrop" onClick={() => setOpenCal(false)}>
+              <div
+                ref={popRef}
+                className="cal-sheet"
+                onClick={e => e.stopPropagation()}
+              >
+                <div className="dp-header">
+                  <div className="dp-guide">{guideText}</div>
+                  <button
+                    className="dp-clear"
+                    onClick={() => setRange({ from: null, to: null })}
+                    disabled={!range.from && !range.to}
+                  >
+                    Clear dates
+                  </button>
+                </div>
+                <DayPicker
+                  mode="range"
+                  selected={range}
+                  onSelect={setRange}
+                  disabled={disabledDates}
+                />
+              </div>
+            </div>
+          ) : (
+            <div
+              ref={popRef}
+              className="popover"
+              style={{ top: coords.top, left: coords.left, width: coords.width }}
+            >
+              <div className="dp-header">
+                <div className="dp-guide">{guideText}</div>
+                <button
+                  className="dp-clear"
+                  onClick={() => setRange({ from: null, to: null })}
+                  disabled={!range.from && !range.to}
+                >
+                  Clear dates
+                </button>
+              </div>
+              <DayPicker
+                mode="range"
+                selected={range}
+                onSelect={setRange}
+                disabled={disabledDates}
+              />
+            </div>
+          )}
         </PopoverPortal>
       )}
 
