@@ -20,6 +20,17 @@ export default function ListingCard({ listing, prefillDates, prefillGuests }) {
   const [range, setRange] = useState(prefillDates || { from: null, to: null });
   const [guests, setGuests] = useState(prefillGuests || 1);
   const [openEnquiry, setOpenEnquiry] = useState(false);
+  const [showActions, setShowActions] = useState(false);
+
+  const [openUpsell, setOpenUpsell] = useState(false);
+  const upsellBtnRef = useRef(null);
+  const upsellPopRef = useRef(null);
+  useOnClickOutside([upsellBtnRef, upsellPopRef], () => setOpenUpsell(false));
+  useOnEsc(() => setOpenUpsell(false));
+  const [upsellCoords, setUpsellCoords] = useState({ top: 0, left: 0, width: 260 });
+  const [extras, setExtras] = useState({ airport: false, tours: false });
+
+  const [disabledDates, setDisabledDates] = useState([]);
   const { formatCurrency } = useCurrency();
   const [showActions, setShowActions] = useState(false);
 
@@ -46,6 +57,27 @@ export default function ListingCard({ listing, prefillDates, prefillGuests }) {
   }, [openCal]);
 
   useEffect(() => {
+    function position() {
+      const r = upsellBtnRef.current?.getBoundingClientRect();
+      if (!r) return;
+      setUpsellCoords(c => ({
+        ...c,
+        top: r.bottom + 6,
+        left: Math.max(8, Math.min(r.left, window.innerWidth - c.width - 20))
+      }));
+    }
+    if (openUpsell) {
+      position();
+      window.addEventListener('resize', position);
+      window.addEventListener('scroll', position, true);
+      return () => {
+        window.removeEventListener('resize', position);
+        window.removeEventListener('scroll', position, true);
+      };
+    }
+  }, [openUpsell]);
+
+  useEffect(() => {
     if (openCal && !disabledDates.length) {
       fetchAvailability(listing.id)
         .then(d => setDisabledDates(d.map(dt => new Date(dt))))
@@ -69,6 +101,12 @@ export default function ListingCard({ listing, prefillDates, prefillGuests }) {
 
   
   const hasPref = range.from && range.to;
+  const guideText = !range.from ? 'Select check-in date' : !range.to ? 'Select check-out date' : '';
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+
+  function toggleUpsell() {
+    setOpenUpsell(v => !v);
+  }
   const formattedAddress = formatAddress(listing.address);
   const mapLink = getMapLink(listing.address);
   const guideText = !range.from ? 'Select check-in date' : !range.to ? 'Select check-out date' : '';
@@ -124,6 +162,15 @@ export default function ListingCard({ listing, prefillDates, prefillGuests }) {
                   }}
                 >
                   Enquire
+                </button>
+                <button
+                  ref={upsellBtnRef}
+                  className="btn-light"
+                  onClick={toggleUpsell}
+                  aria-haspopup="dialog"
+                  aria-expanded={openUpsell}
+                >
+                  Enhance your stay
                 </button>
                 <a
                   className="icon-btn whatsapp"
@@ -217,6 +264,33 @@ export default function ListingCard({ listing, prefillDates, prefillGuests }) {
               />
             </div>
           )}
+        </PopoverPortal>
+      )}
+
+      {openUpsell && (
+        <PopoverPortal>
+          <div
+            ref={upsellPopRef}
+            className="popover"
+            style={{ top: upsellCoords.top, left: upsellCoords.left, width: upsellCoords.width }}
+          >
+            <label>
+              <input
+                type="checkbox"
+                checked={extras.airport}
+                onChange={e => setExtras({ ...extras, airport: e.target.checked })}
+              />{' '}
+              Airport pickup
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                checked={extras.tours}
+                onChange={e => setExtras({ ...extras, tours: e.target.checked })}
+              />{' '}
+              Local tours
+            </label>
+          </div>
         </PopoverPortal>
       )}
 
