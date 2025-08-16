@@ -21,10 +21,9 @@ export default function ListingCard({ listing, prefillDates, prefillGuests }) {
   const [range, setRange] = useState(prefillDates || { from: null, to: null });
   const [guests, setGuests] = useState(prefillGuests || 1);
   const [openEnquiry, setOpenEnquiry] = useState(false);
-  const { formatCurrency } = useCurrency();
   const [showActions, setShowActions] = useState(false);
   const [disabledDates, setDisabledDates] = useState([]);
-  const [showActions, setShowActions] = useState(false);
+  const { formatCurrency } = useCurrency();
 
   const [openUpsell, setOpenUpsell] = useState(false);
   const upsellBtnRef = useRef(null);
@@ -33,10 +32,6 @@ export default function ListingCard({ listing, prefillDates, prefillGuests }) {
   useOnEsc(() => setOpenUpsell(false));
   const [upsellCoords, setUpsellCoords] = useState({ top: 0, left: 0, width: 260 });
   const [extras, setExtras] = useState({ airport: false, tours: false });
-
-  const [disabledDates, setDisabledDates] = useState([]);
-  const { formatCurrency } = useCurrency();
-  const [showActions, setShowActions] = useState(false);
 
   const [coords, setCoords] = useState({ top: 0, left: 0, width: 320 });
   useEffect(() => {
@@ -90,7 +85,7 @@ export default function ListingCard({ listing, prefillDates, prefillGuests }) {
   }, [openCal, listing.id, disabledDates.length]);
 
   const preferredLabel = range.from && range.to
-    ? `${format(range.from,'dd MMM')} → ${format(range.to,'dd MMM')}`
+    ? `${format(range.from, 'dd MMM')} → ${format(range.to, 'dd MMM')}`
     : '';
 
   const whatsappLink = (() => {
@@ -103,7 +98,6 @@ export default function ListingCard({ listing, prefillDates, prefillGuests }) {
     return `https://wa.me/${CONTACT.whatsappE164.replace('+','')}?text=${msg}`;
   })();
 
-  
   const hasPref = range.from && range.to;
   const guideText = !range.from ? 'Select check-in date' : !range.to ? 'Select check-out date' : '';
   const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
@@ -113,8 +107,6 @@ export default function ListingCard({ listing, prefillDates, prefillGuests }) {
   }
   const formattedAddress = formatAddress(listing.address);
   const mapLink = getMapLink(listing.address);
-  const guideText = !range.from ? 'Select check-in date' : !range.to ? 'Select check-out date' : '';
-  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
 
   return (
     <div className="lc-card">
@@ -125,10 +117,6 @@ export default function ListingCard({ listing, prefillDates, prefillGuests }) {
         <div className="lc-header">
           <h3 className="lc-title"><Link to={`/listings/${listing.id}`}>{listing.title}</Link></h3>
           <div className="lc-sub"><a href={mapLink} target="_blank" rel="noreferrer">{formattedAddress}</a></div>
-            <h2 className="lc-title"><Link to={`/listings/${listing.id}`}>{listing.title}</Link></h2>
-          <div className="lc-sub">{listing.location}</div>
-          <div className="lc-price">₹{listing.pricePerNight} / night</div>
-          <div className="lc-sub">{listing.location}</div>
           <div className="lc-price">{formatCurrency(listing.pricePerNight)} / night</div>
         </div>
 
@@ -168,7 +156,7 @@ export default function ListingCard({ listing, prefillDates, prefillGuests }) {
                   }}
                 >
                   Enquire
-                </button>
+                </Button>
                 <button
                   ref={upsellBtnRef}
                   className="btn-light"
@@ -312,3 +300,4 @@ export default function ListingCard({ listing, prefillDates, prefillGuests }) {
     </div>
   );
 }
+
