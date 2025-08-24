@@ -1,12 +1,11 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import Header from './components/chrome/Header';
 import Footer from './components/chrome/Footer';
-import HomePage from './pages/HomePage';
+import ListingsPage from '@/pages/ListingsPage';
 import ListingDetails from './pages/ListingDetails';
 import GuestBooking from './pages/GuestBooking';
 import BookingSummary from './pages/BookingSummary';
 import BookingConfirmation from './pages/BookingConfirmation';
-import Listings from './pages/Listings';
 import SafetyProtocols from './pages/SafetyProtocols';
 
 export default function AppRoutes() {
@@ -14,8 +13,8 @@ export default function AppRoutes() {
     <>
       <Header />
       <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/listings" element={<Listings />} />
+        <Route path="/" element={<Navigate to="/listings" replace />} />
+        <Route path="/listings" element={<ListingsPage />} />
         <Route path="/listings/:id" element={<ListingDetails />} />
         <Route path="/guest-booking" element={<GuestBooking />} />
         <Route path="/booking/summary" element={<BookingSummary />} />
